@@ -1,18 +1,21 @@
 // src/components/Register.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const { setUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/users/register', { name, email, password });
       setMessage(`User registered: ${response.data.name}`);
+      setUser(response.data);
     } catch (error) {
       setMessage(`Error: ${error.response && error.response.data.message ? error.response.data.message : error.message}`);
     }
