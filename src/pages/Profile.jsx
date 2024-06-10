@@ -1,22 +1,21 @@
-// src/components/Profile.jsx
+// src/pages/Profile.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
   const { user, setUser } = useAuth();
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (user) {
-      setName(user.name);
-      setEmail(user.email);
-    }
+    setName(user.name);
+    setEmail(user.email);
   }, [user]);
 
-  const handleUpdate = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const config = {
@@ -24,10 +23,9 @@ const Profile = () => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-
-      const response = await axios.put('http://localhost:5000/api/users/profile', { name, email }, config);
-      setMessage('Profile updated successfully');
+      const response = await axios.put('http://localhost:5000/api/users/profile', { name, email, password }, config);
       setUser(response.data);
+      setMessage('Profile updated successfully');
     } catch (error) {
       setMessage(`Error: ${error.response && error.response.data.message ? error.response.data.message : error.message}`);
     }
@@ -36,7 +34,7 @@ const Profile = () => {
   return (
     <div>
       <h2>Profile</h2>
-      <form onSubmit={handleUpdate}>
+      <form onSubmit={handleSubmit}>
         <div>
           <label>Name:</label>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
@@ -44,6 +42,10 @@ const Profile = () => {
         <div>
           <label>Email:</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <button type="submit">Update Profile</button>
       </form>

@@ -2,10 +2,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import LandingPage from './components/LandingPage';
-import Login from './components/Login';
-import Register from './components/Register';
-import Profile from './components/Profile';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Profile from './pages/Profile';
+import RestaurantList from './pages/RestaurantList';
+import LandingPage from './pages/LandingPage';
 import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
@@ -17,12 +18,14 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+        <Route path="/restaurants" element={<RestaurantList />} />
       </Routes>
     </div>
   );
 };
 
 export default App;
+
 
 
 

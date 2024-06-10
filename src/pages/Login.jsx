@@ -1,7 +1,8 @@
-// src/components/Login.jsx
+// src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import './Form.css'
 
 const Login = () => {
   const [email, setEmail] = useState('');
