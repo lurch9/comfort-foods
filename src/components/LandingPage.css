@@ -1,0 +1,35 @@
+/* src/components/LandingPage.css */
+.landing-page {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .landing-page h1 {
+    margin-bottom: 1rem;
+  }
+  
+  .landing-page form {
+    display: inline-block;
+    margin-top: 1rem;
+  }
+  
+  .landing-page input {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .landing-page button {
+    padding: 0.5rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .landing-page button:hover {
+    background-color: #0056b3;
+  }
+  

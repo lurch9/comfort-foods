@@ -1,0 +1,37 @@
+/* src/components/RestaurantList.css */
+.restaurant-list {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .restaurant-list h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .restaurant-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .restaurant-list li {
+    border-bottom: 1px solid #ccc;
+    padding: 1rem 0;
+  }
+  
+  .restaurant-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .restaurant-list h3 {
+    margin: 0 0 0.5rem;
+  }
+  
+  .restaurant-list p {
+    margin: 0;
+  }
+  
