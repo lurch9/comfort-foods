@@ -16,7 +16,7 @@ const Header = () => {
           {user ? (
             <>
               <li>
-                <Link to="/profile">Profile</Link>
+                <Link to="/dashboard">Dashboard</Link>
               </li>
               <li>
                 <button onClick={logout}>Logout</button>
@@ -25,10 +25,10 @@ const Header = () => {
           ) : (
             <>
               <li>
-                <Link to="/register">Register</Link>
+                <Link to="/login">Login</Link>
               </li>
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/register">Register</Link>
               </li>
             </>
           )}
@@ -39,6 +39,8 @@ const Header = () => {
 };
 
 export default Header;
+
+
 
 
 

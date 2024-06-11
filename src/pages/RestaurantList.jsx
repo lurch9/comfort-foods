@@ -29,7 +29,7 @@ const RestaurantList = () => {
 
   const fetchRestaurants = async (zip) => {
     try {
-      const response = await axios.get(`http://your-api-endpoint/restaurants?zip=${zip}`);
+      const response = await axios.get(`http://localhost:5000/api/restaurants?zip=${zip}`);
       setRestaurants(response.data);
     } catch (error) {
       console.error('Error fetching restaurants:', error);

@@ -1,0 +1,12 @@
+/* src/pages/Dashboard.css */
+.dashboard-container {
+    padding: 20px;
+  }
+  
+  .dashboard-info {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
