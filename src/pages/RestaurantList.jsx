@@ -4,21 +4,28 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './RestaurantList.css';
 import { useAuth } from '../context/AuthContext';
+import { useLocationContext } from '../context/LocationContext';
+import ChangeLocation from '../components/ChangeLocation';
 
 const RestaurantList = () => {
-  const [restaurants, setRestaurants] = useState([]);
-  const [zip, setZip] = useState('');
   const { user } = useAuth();
-  const location = useLocation();
+  const { location, setLocation } = useLocationContext();
+  const [restaurants, setRestaurants] = useState([]);
+  const urlLocation = useLocation();
 
   useEffect(() => {
-    const query = new URLSearchParams(location.search);
-    const zipCode = query.get('zip') || user?.zip;  // Use logged-in user's zip if available
-    if (zipCode) {
-      setZip(zipCode);
-      fetchRestaurants(zipCode);
+    const query = new URLSearchParams(urlLocation.search);
+    const zipQuery = query.get('zip');
+    if (zipQuery) {
+      setLocation(zipQuery);
+      fetchRestaurants(zipQuery);
+    } else if (location) {
+      fetchRestaurants(location);
+    } else if (user && user.zip) {
+      setLocation(user.zip);
+      fetchRestaurants(user.zip);
     }
-  }, [location, user]);
+  }, [urlLocation, user, location, setLocation]);
 
   const fetchRestaurants = async (zip) => {
     try {
@@ -31,7 +38,8 @@ const RestaurantList = () => {
 
   return (
     <div className="restaurant-list">
-      <h2>Restaurants in {zip}</h2>
+      <h2>Restaurants in {location}</h2>
+      <ChangeLocation />
       {restaurants.length > 0 ? (
         <ul>
           {restaurants.map((restaurant) => (
@@ -49,5 +57,7 @@ const RestaurantList = () => {
 };
 
 export default RestaurantList;
+
+
 
 

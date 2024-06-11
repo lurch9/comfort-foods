@@ -1,4 +1,5 @@
-import React from 'react';
+// src/pages/Profile.jsx
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -7,18 +8,40 @@ import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
   const { user, setUser } = useAuth();
+  const [initialValues, setInitialValues] = useState({
+    name: '',
+    email: '',
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
+    dateOfBirth: '',
+    currentPassword: '',
+    newPassword: '',
+    confirmNewPassword: '',
+  });
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setInitialValues({
+        name: user.name || '',
+        email: user.email || '',
+        street: user.street || '',
+        city: user.city || '',
+        state: user.state || '',
+        zip: user.zip || '',
+        dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth).toISOString().split('T')[0] : '',
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: '',
+      });
+    }
+  }, [user]);
 
   const formik = useFormik({
-    initialValues: {
-      name: user.name || '',
-      email: user.email || '',
-      street: user.street || '',
-      city: user.city || '',
-      state: user.state || '',
-      zip: user.zip || '',
-      dateOfBirth: user.dateOfBirth || '',
-      password: '',
-    },
+    initialValues,
+    enableReinitialize: true,
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
@@ -27,7 +50,29 @@ const Profile = () => {
       state: Yup.string().required('Required'),
       zip: Yup.string().required('Required'),
       dateOfBirth: Yup.date().required('Required'),
-      password: Yup.string(),
+      currentPassword: Yup.string().test(
+        'passwords-match',
+        'Current Password Required to Change Password',
+        function(value) {
+          const { newPassword, confirmNewPassword } = this.parent;
+          if (newPassword || confirmNewPassword) {
+            return value !== undefined;
+          }
+          return true;
+        }
+      ),
+      newPassword: Yup.string().test(
+        'passwords-match',
+        'New password and confirmation must match',
+        function(value) {
+          const { confirmNewPassword } = this.parent;
+          if (value) {
+            return confirmNewPassword === value;
+          }
+          return true;
+        }
+      ),
+      confirmNewPassword: Yup.string().oneOf([Yup.ref('newPassword'), null], 'Passwords must match'),
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
@@ -35,8 +80,10 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setUser(response.data);
+        setMessage('Profile updated successfully');
       } catch (error) {
         setErrors({ submit: error.response.data.message || error.message });
+        setMessage('');
       }
       setSubmitting(false);
     },
@@ -124,23 +171,48 @@ const Profile = () => {
           ) : null}
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="currentPassword">Current Password:</label>
           <input
-            id="password"
+            id="currentPassword"
             type="password"
-            {...formik.getFieldProps('password')}
+            {...formik.getFieldProps('currentPassword')}
           />
-          {formik.touched.password && formik.errors.password ? (
-            <div className="error-message">{formik.errors.password}</div>
+          {formik.touched.currentPassword && formik.errors.currentPassword ? (
+            <div className="error-message">{formik.errors.currentPassword}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="newPassword">New Password:</label>
+          <input
+            id="newPassword"
+            type="password"
+            {...formik.getFieldProps('newPassword')}
+          />
+          {formik.touched.newPassword && formik.errors.newPassword ? (
+            <div className="error-message">{formik.errors.newPassword}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="confirmNewPassword">Confirm New Password:</label>
+          <input
+            id="confirmNewPassword"
+            type="password"
+            {...formik.getFieldProps('confirmNewPassword')}
+          />
+          {formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? (
+            <div className="error-message">{formik.errors.confirmNewPassword}</div>
           ) : null}
         </div>
         <button type="submit" disabled={formik.isSubmitting}>
           Update Profile
         </button>
         {formik.errors.submit && <div className="error-message">{formik.errors.submit}</div>}
+        {message && <div className="success-message">{message}</div>}
       </form>
     </div>
   );
 };
 
 export default Profile;
+
+

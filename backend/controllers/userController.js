@@ -96,8 +96,15 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.zip = req.body.zip || user.zip;
     user.dateOfBirth = req.body.dateOfBirth || user.dateOfBirth;
 
-    if (req.body.password) {
-      user.password = req.body.password;
+    if (req.body.currentPassword) {
+      if (await user.matchPassword(req.body.currentPassword)) {
+        if (req.body.newPassword) {
+          user.password = req.body.newPassword;
+        }
+      } else {
+        res.status(400);
+        throw new Error('Current password is incorrect');
+      }
     }
 
     const updatedUser = await user.save();
@@ -121,3 +128,5 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 
 module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
 
+
+module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
