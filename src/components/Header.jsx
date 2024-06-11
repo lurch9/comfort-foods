@@ -2,17 +2,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import './Header.css';
 
 const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header>
+    <header className="header">
       <nav>
-        <ul>
+        <ul className="nav-left">
           <li>
             <Link to="/">Home</Link>
           </li>
+        </ul>
+        <div className="logo">
+          <h1>Comfort Foods</h1>
+        </div>
+        <ul className="nav-right">
           {user ? (
             <>
               <li>
@@ -39,6 +45,8 @@ const Header = () => {
 };
 
 export default Header;
+
+
 
 
 

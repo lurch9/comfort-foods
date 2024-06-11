@@ -15,7 +15,13 @@ const Register = () => {
     initialValues: {
       name: '',
       email: '',
-      password: ''
+      password: '',
+      confirmPassword: '',
+      street: '',
+      city: '',
+      state: '',
+      zip: '',
+      dateOfBirth: ''
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -23,12 +29,20 @@ const Register = () => {
         .required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().required('Required'),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Passwords must match')
+        .required('Required'),
+      street: Yup.string().required('Required'),
+      city: Yup.string().required('Required'),
+      state: Yup.string().required('Required'),
+      zip: Yup.string().required('Required'),
+      dateOfBirth: Yup.date().required('Required'),
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
         const response = await axios.post('http://localhost:5000/api/users/register', values);
         login(response.data); // Use login method
-        navigate('/profile');
+        navigate('/restaurants');
       } catch (error) {
         setErrors({ submit: error.response.data.message || error.message });
       }
@@ -73,6 +87,72 @@ const Register = () => {
             <div className="error-message">{formik.errors.password}</div>
           ) : null}
         </div>
+        <div>
+          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            {...formik.getFieldProps('confirmPassword')}
+          />
+          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
+            <div className="error-message">{formik.errors.confirmPassword}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="street">Street:</label>
+          <input
+            id="street"
+            type="text"
+            {...formik.getFieldProps('street')}
+          />
+          {formik.touched.street && formik.errors.street ? (
+            <div className="error-message">{formik.errors.street}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="city">City:</label>
+          <input
+            id="city"
+            type="text"
+            {...formik.getFieldProps('city')}
+          />
+          {formik.touched.city && formik.errors.city ? (
+            <div className="error-message">{formik.errors.city}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="state">State:</label>
+          <input
+            id="state"
+            type="text"
+            {...formik.getFieldProps('state')}
+          />
+          {formik.touched.state && formik.errors.state ? (
+            <div className="error-message">{formik.errors.state}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="zip">Zip Code:</label>
+          <input
+            id="zip"
+            type="text"
+            {...formik.getFieldProps('zip')}
+          />
+          {formik.touched.zip && formik.errors.zip ? (
+            <div className="error-message">{formik.errors.zip}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="dateOfBirth">Date of Birth:</label>
+          <input
+            id="dateOfBirth"
+            type="date"
+            {...formik.getFieldProps('dateOfBirth')}
+          />
+          {formik.touched.dateOfBirth && formik.errors.dateOfBirth ? (
+            <div className="error-message">{formik.errors.dateOfBirth}</div>
+          ) : null}
+        </div>
         <button type="submit" disabled={formik.isSubmitting}>
           Register
         </button>
@@ -83,6 +163,7 @@ const Register = () => {
 };
 
 export default Register;
+
 
 
 
