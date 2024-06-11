@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import RestaurantList from './pages/RestaurantList';
 import LandingPage from './pages/LandingPage';
 import PrivateRoute from './components/PrivateRoute';
+import './App.css'
 
 const App = () => {
   return (

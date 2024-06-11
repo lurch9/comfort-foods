@@ -3,7 +3,7 @@ const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, street, city, state, zip, dateOfBirth } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -16,6 +16,11 @@ const registerUser = asyncHandler(async (req, res) => {
     name,
     email,
     password,
+    street,
+    city,
+    state,
+    zip,
+    dateOfBirth,
   });
 
   if (user) {
@@ -23,6 +28,11 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      street: user.street,
+      city: user.city,
+      state: user.state,
+      zip: user.zip,
+      dateOfBirth: user.dateOfBirth,
       token: generateToken(user._id),
     });
   } else {
@@ -41,6 +51,11 @@ const loginUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      street: user.street,
+      city: user.city,
+      state: user.state,
+      zip: user.zip,
+      dateOfBirth: user.dateOfBirth,
       token: generateToken(user._id),
     });
   } else {
@@ -57,6 +72,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
+      street: user.street,
+      city: user.city,
+      state: user.state,
+      zip: user.zip,
+      dateOfBirth: user.dateOfBirth,
     });
   } else {
     res.status(404);
@@ -70,6 +90,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
+    user.street = req.body.street || user.street;
+    user.city = req.body.city || user.city;
+    user.state = req.body.state || user.state;
+    user.zip = req.body.zip || user.zip;
+    user.dateOfBirth = req.body.dateOfBirth || user.dateOfBirth;
+
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -80,6 +106,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      street: updatedUser.street,
+      city: updatedUser.city,
+      state: updatedUser.state,
+      zip: updatedUser.zip,
+      dateOfBirth: updatedUser.dateOfBirth,
       token: generateToken(updatedUser._id),
     });
   } else {
@@ -89,3 +120,4 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 });
 
 module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+

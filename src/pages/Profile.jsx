@@ -1,14 +1,12 @@
-// src/pages/Profile.jsx
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import './form.css';
+import { useAuth } from '../context/AuthContext';
 
 const Profile = () => {
   const { user, setUser } = useAuth();
-  const [message, setMessage] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -18,9 +16,8 @@ const Profile = () => {
       city: user.city || '',
       state: user.state || '',
       zip: user.zip || '',
-      dateOfBirth: user.dateOfBirth ? user.dateOfBirth.substring(0, 10) : '',
+      dateOfBirth: user.dateOfBirth || '',
       password: '',
-      confirmPassword: '',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Required'),
@@ -31,7 +28,6 @@ const Profile = () => {
       zip: Yup.string().required('Required'),
       dateOfBirth: Yup.date().required('Required'),
       password: Yup.string(),
-      confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match'),
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
@@ -39,7 +35,6 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setUser(response.data);
-        setMessage('Profile updated successfully');
       } catch (error) {
         setErrors({ submit: error.response.data.message || error.message });
       }
@@ -139,22 +134,10 @@ const Profile = () => {
             <div className="error-message">{formik.errors.password}</div>
           ) : null}
         </div>
-        <div>
-          <label htmlFor="confirmPassword">Confirm Password:</label>
-          <input
-            id="confirmPassword"
-            type="password"
-            {...formik.getFieldProps('confirmPassword')}
-          />
-          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-            <div className="error-message">{formik.errors.confirmPassword}</div>
-          ) : null}
-        </div>
         <button type="submit" disabled={formik.isSubmitting}>
-          Update
+          Update Profile
         </button>
         {formik.errors.submit && <div className="error-message">{formik.errors.submit}</div>}
-        {message && <div className="success-message">{message}</div>}
       </form>
     </div>
   );

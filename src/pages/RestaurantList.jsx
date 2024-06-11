@@ -1,20 +1,24 @@
-// src/components/RestaurantList.jsx
+// src/pages/RestaurantList.jsx
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './RestaurantList.css';
+import { useAuth } from '../context/AuthContext';
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
+  const [zip, setZip] = useState('');
+  const { user } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const zip = query.get('zip');
-    if (zip) {
-      fetchRestaurants(zip);
+    const zipCode = query.get('zip') || user?.zip;  // Use logged-in user's zip if available
+    if (zipCode) {
+      setZip(zipCode);
+      fetchRestaurants(zipCode);
     }
-  }, [location]);
+  }, [location, user]);
 
   const fetchRestaurants = async (zip) => {
     try {
@@ -27,7 +31,7 @@ const RestaurantList = () => {
 
   return (
     <div className="restaurant-list">
-      <h2>Restaurants in your area</h2>
+      <h2>Restaurants in {zip}</h2>
       {restaurants.length > 0 ? (
         <ul>
           {restaurants.map((restaurant) => (
@@ -45,4 +49,5 @@ const RestaurantList = () => {
 };
 
 export default RestaurantList;
+
 
