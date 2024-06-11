@@ -1,3 +1,4 @@
+// src/pages/Login.jsx
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -7,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -22,14 +23,10 @@ const Login = () => {
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
         const response = await axios.post('http://localhost:5000/api/users/login', values);
-        setUser(response.data);
+        login(response.data); // Use login method
         navigate('/profile');
       } catch (error) {
-        if (error.response && error.response.status === 401) {
-          setErrors({ submit: 'Incorrect email or password' });
-        } else {
-          setErrors({ submit: error.response.data.message || error.message });
-        }
+        setErrors({ submit: error.response.data.message || error.message });
       }
       setSubmitting(false);
     },
@@ -71,3 +68,4 @@ const Login = () => {
 };
 
 export default Login;
+

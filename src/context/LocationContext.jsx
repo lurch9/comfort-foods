@@ -1,15 +1,29 @@
 // src/context/LocationContext.jsx
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const LocationContext = createContext();
 
-export const useLocationContext = () => useContext(LocationContext);
+export const useLocationContext = () => {
+  return useContext(LocationContext);
+};
 
 export const LocationProvider = ({ children }) => {
   const [location, setLocation] = useState('');
 
+  useEffect(() => {
+    const storedLocation = localStorage.getItem('userLocation');
+    if (storedLocation) {
+      setLocation(storedLocation);
+    }
+  }, []);
+
+  const updateLocation = (newLocation) => {
+    setLocation(newLocation);
+    localStorage.setItem('userLocation', newLocation);
+  };
+
   return (
-    <LocationContext.Provider value={{ location, setLocation }}>
+    <LocationContext.Provider value={{ location, updateLocation }}>
       {children}
     </LocationContext.Provider>
   );

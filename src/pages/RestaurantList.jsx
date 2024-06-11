@@ -1,6 +1,5 @@
 // src/pages/RestaurantList.jsx
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './RestaurantList.css';
 import { useAuth } from '../context/AuthContext';
@@ -9,23 +8,17 @@ import ChangeLocation from '../components/ChangeLocation';
 
 const RestaurantList = () => {
   const { user } = useAuth();
-  const { location, setLocation } = useLocationContext();
+  const { location, updateLocation } = useLocationContext();
   const [restaurants, setRestaurants] = useState([]);
-  const urlLocation = useLocation();
 
   useEffect(() => {
-    const query = new URLSearchParams(urlLocation.search);
-    const zipQuery = query.get('zip');
-    if (zipQuery) {
-      setLocation(zipQuery);
-      fetchRestaurants(zipQuery);
-    } else if (location) {
+    if (location) {
       fetchRestaurants(location);
     } else if (user && user.zip) {
-      setLocation(user.zip);
+      updateLocation(user.zip);
       fetchRestaurants(user.zip);
     }
-  }, [urlLocation, user, location, setLocation]);
+  }, [user, location, updateLocation]);
 
   const fetchRestaurants = async (zip) => {
     try {

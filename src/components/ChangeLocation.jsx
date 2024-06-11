@@ -1,32 +1,38 @@
 // src/components/ChangeLocation.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useLocationContext } from '../context/LocationContext';
+import '../pages/form.css';
 
 const ChangeLocation = () => {
-  const { setLocation } = useLocationContext();
+  const { updateLocation } = useLocationContext();
   const [zip, setZip] = useState('');
-  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLocation(zip);
-    navigate(`/restaurants?zip=${zip}`);
+    if (zip) {
+      updateLocation(zip);
+      setZip('');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="zip">Enter Zip Code:</label>
-      <input
-        id="zip"
-        type="text"
-        value={zip}
-        onChange={(e) => setZip(e.target.value)}
-      />
-      <button type="submit">Change Location</button>
-    </form>
+    <div className="form-container">
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="zip">Enter Zip Code:</label>
+          <input
+            id="zip"
+            type="text"
+            value={zip}
+            onChange={(e) => setZip(e.target.value)}
+          />
+        </div>
+        <button type="submit">Change Location</button>
+      </form>
+    </div>
   );
 };
 
 export default ChangeLocation;
+
 

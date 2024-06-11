@@ -2,13 +2,13 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
+import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
 import RestaurantList from './pages/RestaurantList';
-import LandingPage from './pages/LandingPage';
 import PrivateRoute from './components/PrivateRoute';
-import './App.css'
+import PublicRoute from './components/PublicRoute';
 
 const App = () => {
   return (
@@ -16,9 +16,30 @@ const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
         <Route path="/restaurants" element={<RestaurantList />} />
       </Routes>
     </div>
@@ -26,6 +47,7 @@ const App = () => {
 };
 
 export default App;
+
 
 
 

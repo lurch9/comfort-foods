@@ -8,38 +8,26 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       name: '',
       email: '',
-      password: '',
-      confirmPassword: '',
-      street: '',
-      city: '',
-      state: '',
-      zip: '',
-      dateOfBirth: '',
+      password: ''
     },
     validationSchema: Yup.object({
-      name: Yup.string().max(15, 'Must be 15 characters or less').required('Required'),
+      name: Yup.string()
+        .max(15, 'Must be 15 characters or less')
+        .required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().required('Required'),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Required'),
-      street: Yup.string().required('Required'),
-      city: Yup.string().required('Required'),
-      state: Yup.string().required('Required'),
-      zip: Yup.string().required('Required'),
-      dateOfBirth: Yup.date().required('Required'),
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
         const response = await axios.post('http://localhost:5000/api/users/register', values);
-        setUser(response.data);
+        login(response.data); // Use login method
         navigate('/profile');
       } catch (error) {
         setErrors({ submit: error.response.data.message || error.message });
@@ -52,16 +40,37 @@ const Register = () => {
     <div className="form-container">
       <h2>Register</h2>
       <form onSubmit={formik.handleSubmit}>
-        {/* Other fields remain unchanged */}
         <div>
-          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <label htmlFor="name">Name:</label>
           <input
-            id="confirmPassword"
-            type="password"
-            {...formik.getFieldProps('confirmPassword')}
+            id="name"
+            type="text"
+            {...formik.getFieldProps('name')}
           />
-          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-            <div className="error-message">{formik.errors.confirmPassword}</div>
+          {formik.touched.name && formik.errors.name ? (
+            <div className="error-message">{formik.errors.name}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            type="email"
+            {...formik.getFieldProps('email')}
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="error-message">{formik.errors.email}</div>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input
+            id="password"
+            type="password"
+            {...formik.getFieldProps('password')}
+          />
+          {formik.touched.password && formik.errors.password ? (
+            <div className="error-message">{formik.errors.password}</div>
           ) : null}
         </div>
         <button type="submit" disabled={formik.isSubmitting}>
@@ -74,6 +83,7 @@ const Register = () => {
 };
 
 export default Register;
+
 
 
 
