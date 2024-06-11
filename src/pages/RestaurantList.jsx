@@ -1,15 +1,16 @@
 // src/pages/RestaurantList.jsx
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import './RestaurantList.css';
 import { useAuth } from '../context/AuthContext';
 import { useLocationContext } from '../context/LocationContext';
 import ChangeLocation from '../components/ChangeLocation';
+import mockRestaurants from '../mockData/mockRestaurants.json'; // Import mock data
 
 const RestaurantList = () => {
   const { user } = useAuth();
-  const { location, updateLocation } = useLocationContext();
+  const { location, setLocation } = useLocationContext();
   const [restaurants, setRestaurants] = useState([]);
   const urlLocation = useLocation();
 
@@ -17,20 +18,21 @@ const RestaurantList = () => {
     const query = new URLSearchParams(urlLocation.search);
     const zipQuery = query.get('zip');
     if (zipQuery) {
-      updateLocation(zipQuery);
+      setLocation(zipQuery);
       fetchRestaurants(zipQuery);
     } else if (location) {
       fetchRestaurants(location);
     } else if (user && user.zip) {
-      updateLocation(user.zip);
+      setLocation(user.zip);
       fetchRestaurants(user.zip);
     }
-  }, [urlLocation, user, location, updateLocation]);
+  }, [urlLocation, user, location, setLocation]);
 
   const fetchRestaurants = async (zip) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/restaurants?zip=${zip}`);
-      setRestaurants(response.data);
+      // Use mock data instead of actual API call
+      // const response = await axios.get(`http://your-api-endpoint/restaurants?zip=${zip}`);
+      setRestaurants(mockRestaurants);
     } catch (error) {
       console.error('Error fetching restaurants:', error);
     }
@@ -46,6 +48,7 @@ const RestaurantList = () => {
             <li key={restaurant.id}>
               <h3>{restaurant.name}</h3>
               <p>{restaurant.description}</p>
+              <Link to={`/restaurants/${restaurant.id}`}>View Details</Link>
             </li>
           ))}
         </ul>
@@ -57,6 +60,7 @@ const RestaurantList = () => {
 };
 
 export default RestaurantList;
+
 
 
 

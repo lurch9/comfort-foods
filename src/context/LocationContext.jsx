@@ -23,7 +23,7 @@ export const LocationProvider = ({ children }) => {
   };
 
   return (
-    <LocationContext.Provider value={{ location, updateLocation }}>
+    <LocationContext.Provider value={{ location, setLocation: updateLocation }}>
       {children}
     </LocationContext.Provider>
   );

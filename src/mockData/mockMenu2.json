@@ -1,0 +1,15 @@
+[
+    {
+      "id": "1",
+      "name": "Cheeseburger",
+      "description": "Juicy beef patty with cheese.",
+      "price": 8.99
+    },
+    {
+      "id": "2",
+      "name": "Veggie Burger",
+      "description": "Grilled veggie patty with lettuce and tomato.",
+      "price": 7.99
+    }
+  ]
+  

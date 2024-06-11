@@ -1,0 +1,14 @@
+/* src/pages/RestaurantInfo.css */
+.restaurant-info {
+    padding: 20px;
+  }
+  
+  .restaurant-info h1 {
+    font-size: 2em;
+  }
+  
+  .restaurant-info p {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+  

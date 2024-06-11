@@ -1,0 +1,29 @@
+/* src/pages/RestaurantMenu.css */
+.restaurant-menu {
+    padding: 20px;
+  }
+  
+  .restaurant-menu h2 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+  }
+  
+  .restaurant-menu ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .restaurant-menu li {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+  }
+  
+  .restaurant-menu h3 {
+    margin: 0;
+    font-size: 1.4em;
+  }
+  
+  .restaurant-menu p {
+    margin: 5px 0;
+  }
+  
