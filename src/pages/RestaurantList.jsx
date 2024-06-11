@@ -1,5 +1,6 @@
 // src/pages/RestaurantList.jsx
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './RestaurantList.css';
 import { useAuth } from '../context/AuthContext';
@@ -8,21 +9,27 @@ import ChangeLocation from '../components/ChangeLocation';
 
 const RestaurantList = () => {
   const { user } = useAuth();
-  const { location, updateLocation } = useLocationContext();
+  const { location, setLocation } = useLocationContext();
   const [restaurants, setRestaurants] = useState([]);
+  const urlLocation = useLocation();
 
   useEffect(() => {
-    if (location) {
+    const query = new URLSearchParams(urlLocation.search);
+    const zipQuery = query.get('zip');
+    if (zipQuery) {
+      setLocation(zipQuery);
+      fetchRestaurants(zipQuery);
+    } else if (location) {
       fetchRestaurants(location);
     } else if (user && user.zip) {
-      updateLocation(user.zip);
+      setLocation(user.zip);
       fetchRestaurants(user.zip);
     }
-  }, [user, location, updateLocation]);
+  }, [urlLocation, user, location, setLocation]);
 
   const fetchRestaurants = async (zip) => {
     try {
-      const response = await axios.get(`http://your-api-endpoint/restaurants?zip=${zip}`);
+      const response = await axios.get(`http://localhost:5000/api/restaurants?zip=${zip}`);
       setRestaurants(response.data);
     } catch (error) {
       console.error('Error fetching restaurants:', error);
@@ -50,6 +57,7 @@ const RestaurantList = () => {
 };
 
 export default RestaurantList;
+
 
 
 

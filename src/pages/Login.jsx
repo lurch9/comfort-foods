@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-  const { login } = useAuth();
+  const { setUser } = useAuth();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -23,8 +23,12 @@ const Login = () => {
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
         const response = await axios.post('http://localhost:5000/api/users/login', values);
-        login(response.data); // Use login method
-        navigate('/profile');
+        if (response.data) {
+          setUser(response.data);
+          navigate('/restaurants');
+        } else {
+          setErrors({ submit: 'Login failed. Please try again.' });
+        }
       } catch (error) {
         setErrors({ submit: error.response.data.message || error.message });
       }
@@ -68,4 +72,5 @@ const Login = () => {
 };
 
 export default Login;
+
 
