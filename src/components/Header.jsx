@@ -10,10 +10,16 @@ const Header = () => {
     <header>
       <nav>
         <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
           {user ? (
             <>
               <li>
                 <Link to="/profile">Profile</Link>
+              </li>
+              <li>
+                <Link to="/restaurants">Restaurants Near You</Link>
               </li>
               <li>
                 <button onClick={logout}>Logout</button>
@@ -21,9 +27,6 @@ const Header = () => {
             </>
           ) : (
             <>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
               <li>
                 <Link to="/register">Register</Link>
               </li>
