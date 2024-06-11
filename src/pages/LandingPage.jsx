@@ -1,11 +1,13 @@
 // src/components/LandingPage.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import './LandingPage.css';
+import { useAuth } from '../context/AuthContext';
 
 const LandingPage = () => {
   const [zipCode, setZipCode] = useState('');
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -13,6 +15,11 @@ const LandingPage = () => {
       navigate(`/restaurants?zip=${zipCode}`);
     }
   };
+
+  // Redirect to restaurants page if user is logged in
+  if (user) {
+    return <Navigate to="/restaurants" />;
+  }
 
   return (
     <div className="landing-page">

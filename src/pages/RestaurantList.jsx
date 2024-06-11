@@ -9,7 +9,7 @@ import ChangeLocation from '../components/ChangeLocation';
 
 const RestaurantList = () => {
   const { user } = useAuth();
-  const { location, setLocation } = useLocationContext();
+  const { location, updateLocation } = useLocationContext();
   const [restaurants, setRestaurants] = useState([]);
   const urlLocation = useLocation();
 
@@ -17,19 +17,19 @@ const RestaurantList = () => {
     const query = new URLSearchParams(urlLocation.search);
     const zipQuery = query.get('zip');
     if (zipQuery) {
-      setLocation(zipQuery);
+      updateLocation(zipQuery);
       fetchRestaurants(zipQuery);
     } else if (location) {
       fetchRestaurants(location);
     } else if (user && user.zip) {
-      setLocation(user.zip);
+      updateLocation(user.zip);
       fetchRestaurants(user.zip);
     }
-  }, [urlLocation, user, location, setLocation]);
+  }, [urlLocation, user, location, updateLocation]);
 
   const fetchRestaurants = async (zip) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/restaurants?zip=${zip}`);
+      const response = await axios.get(`http://your-api-endpoint/restaurants?zip=${zip}`);
       setRestaurants(response.data);
     } catch (error) {
       console.error('Error fetching restaurants:', error);
@@ -57,6 +57,8 @@ const RestaurantList = () => {
 };
 
 export default RestaurantList;
+
+
 
 
 
