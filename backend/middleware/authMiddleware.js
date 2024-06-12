@@ -1,4 +1,4 @@
-// src/middleware/authMiddleware.js
+// backend/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
@@ -13,15 +13,15 @@ const protect = asyncHandler(async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('-password');
       next();
     } catch (error) {
+      console.error(error);
       res.status(401);
       throw new Error('Not authorized, token failed');
     }
-  }
-
-  if (!token) {
+  } else {
     res.status(401);
     throw new Error('Not authorized, no token');
   }
 });
 
 module.exports = { protect };
+

@@ -1,12 +1,15 @@
 // src/components/Checkout.jsx
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import './Checkout.css';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Checkout = () => {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     street: '',
@@ -41,14 +44,41 @@ const Checkout = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Mock submission handler
-    alert('Order placed successfully!');
+    try {
+      const order = {
+        items: cart.map((item) => ({
+          product: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        total: cart.reduce((total, item) => total + item.price * item.quantity, 0),
+        name: formData.name,
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        zip: formData.zip,
+      };
+
+      const response = await axios.post('http://localhost:5000/api/orders', order, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      alert('Order placed successfully!');
+      clearCart();
+      navigate('/order-history');
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Failed to place order.');
+    }
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price, 0);
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   return (
@@ -152,6 +182,9 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+
+
 
 
 

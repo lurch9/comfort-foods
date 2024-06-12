@@ -1,20 +1,26 @@
-import React, { createContext, useContext, useState } from 'react';
+// src/context/CartContext.jsx
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
-export const useCart = () => {
-  return useContext(CartContext);
-};
+export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (item) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
+      const existingItem = prevCart.find((i) => i.id === item.id);
       if (existingItem) {
-        return prevCart.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
+        return prevCart.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
         );
       } else {
         return [...prevCart, { ...item, quantity: 1 }];
@@ -24,19 +30,20 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = (item) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
-      if (existingItem.quantity > 1) {
-        return prevCart.map((cartItem) =>
-          cartItem.id === item.id ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
-        );
+      const existingItem = prevCart.find((i) => i.id === item.id);
+      if (existingItem.quantity === 1) {
+        return prevCart.filter((i) => i.id !== item.id);
       } else {
-        return prevCart.filter((cartItem) => cartItem.id !== item.id);
+        return prevCart.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
+        );
       }
     });
   };
 
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem('cart');
   };
 
   return (
@@ -45,5 +52,7 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
+
 
 

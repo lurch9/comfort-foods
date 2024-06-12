@@ -12,6 +12,7 @@ import RestaurantList from './pages/RestaurantList';
 import RestaurantInfo from './pages/RestaurantInfo';
 import RestaurantMenu from './pages/RestaurantMenu';
 import Dashboard from './pages/Dashboard';
+import OrderHistory from './pages/OrderHistory';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 
@@ -20,7 +21,7 @@ function App() {
     <div>
       <Header />
       <Routes>
-        <Route path="/" element={<PublicRoute><Home /></PublicRoute>}/>
+        <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
@@ -30,12 +31,14 @@ function App() {
         <Route path="/restaurants/:id/menu" element={<RestaurantMenu />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-history" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
       </Routes>
     </div>
   );
 }
 
 export default App;
+
 
 
 

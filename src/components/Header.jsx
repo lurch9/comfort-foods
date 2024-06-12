@@ -25,6 +25,9 @@ const Header = () => {
           <li>
             <Link to="/dashboard">Dashboard</Link>
           </li>
+          <li>
+            <Link to="/order-history">Orders</Link>
+          </li>
         </ul>
         <div className="logo">
           <h1>Comfort Foods</h1>
