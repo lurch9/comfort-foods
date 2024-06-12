@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
-import './Checkout.css';
+import '../Styles/Checkout.css';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 

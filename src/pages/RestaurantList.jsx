@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
-import './RestaurantList.css';
+import '../Styles/RestaurantList.css';
 import { useAuth } from '../context/AuthContext';
 import { useLocationContext } from '../context/LocationContext';
 import ChangeLocation from '../components/ChangeLocation';

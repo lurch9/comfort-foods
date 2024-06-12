@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import mockRestaurants from '../mockData/mockRestaurants.json';
-import './RestaurantInfo.css';
+import '../Styles/RestaurantInfo.css';
 
 const RestaurantInfo = () => {
   const { id } = useParams();

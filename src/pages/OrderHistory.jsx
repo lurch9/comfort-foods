@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
-import './OrderHistory.css';
+import '../Styles/OrderHistory.css';
 
 const OrderHistory = () => {
   const { user } = useAuth();

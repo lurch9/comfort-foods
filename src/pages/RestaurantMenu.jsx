@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import mockMenu1 from '../mockData/mockMenu1.json';
 import mockMenu2 from '../mockData/mockMenu2.json';
 import { useCart } from '../context/CartContext';
-import './RestaurantMenu.css';
+import '../Styles/RestaurantMenu.css';
 
 const RestaurantMenu = () => {
   const { id } = useParams();
