@@ -49,7 +49,7 @@ const Checkout = () => {
     try {
       const order = {
         items: cart.map((item) => ({
-          product: item.id,
+          product: item.product, // Ensure the `product` field is correctly mapped
           name: item.name,
           quantity: item.quantity,
           price: item.price,
@@ -95,7 +95,7 @@ const Checkout = () => {
           </thead>
           <tbody>
             {cart.map((item) => (
-              <tr key={item.id}>
+              <tr key={item.product}>
                 <td>{item.name}</td>
                 <td>{item.description}</td>
                 <td>{item.price}</td>
@@ -182,6 +182,7 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
 
 
 

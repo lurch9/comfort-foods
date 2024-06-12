@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useSocket } from '../context/SocketContext';
 import './OrderHistory.css';
 
 const OrderHistory = () => {
   const { user } = useAuth();
+  const socket = useSocket();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -24,6 +26,24 @@ const OrderHistory = () => {
 
     fetchOrders();
   }, [user]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('orderStatusUpdated', ({ orderId, status }) => {
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === orderId ? { ...order, status } : order
+          )
+        );
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('orderStatusUpdated');
+      }
+    };
+  }, [socket]);
 
   return (
     <div className="order-history-page">
@@ -54,4 +74,5 @@ const OrderHistory = () => {
 };
 
 export default OrderHistory;
+
 

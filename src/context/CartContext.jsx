@@ -1,4 +1,3 @@
-// src/context/CartContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
@@ -14,6 +13,25 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
+
+  useEffect(() => {
+    const sessionId = sessionStorage.getItem('sessionId');
+    if (!sessionId) {
+      const newSessionId = Date.now().toString();
+      sessionStorage.setItem('sessionId', newSessionId);
+    }
+
+    const handleBeforeUnload = () => {
+      sessionStorage.removeItem('sessionId');
+      const sessionIds = Object.keys(sessionStorage);
+      if (sessionIds.length === 0) {
+        localStorage.removeItem('cart');
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   const addToCart = (item) => {
     setCart((prevCart) => {
@@ -52,7 +70,6 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-
 
 
 

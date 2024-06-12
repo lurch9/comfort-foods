@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 
 const Cart = () => {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, clearCart } = useCart();
   const navigate = useNavigate();
 
   const handleRemoveFromCart = (item) => {
@@ -42,6 +42,9 @@ const Cart = () => {
           <button className="checkout-button" onClick={handleCheckout}>
             Proceed to Checkout
           </button>
+          <button className="reset-button" onClick={clearCart}>
+            Clear Cart
+          </button>
         </>
       ) : (
         <p>Your cart is empty.</p>
@@ -51,4 +54,6 @@ const Cart = () => {
 };
 
 export default Cart;
+
+
 

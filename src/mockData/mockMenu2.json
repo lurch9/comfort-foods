@@ -1,15 +1,14 @@
 [
-    {
-      "id": "1",
-      "name": "Cheeseburger",
-      "description": "Juicy beef patty with cheese.",
-      "price": 8.99
-    },
-    {
-      "id": "2",
-      "name": "Veggie Burger",
-      "description": "Grilled veggie patty with lettuce and tomato.",
-      "price": 7.99
-    }
-  ]
-  
+  {
+    "product": "666911b679ff06f6cf0693ae",
+    "name": "Veggie Pizza",
+    "description": "Pizza loaded with vegetables",
+    "price": 11.99
+  },
+  {
+    "product": "666911b679ff06f6cf0693af",
+    "name": "BBQ Chicken Pizza",
+    "description": "Pizza with BBQ chicken",
+    "price": 13.99
+  }
+]

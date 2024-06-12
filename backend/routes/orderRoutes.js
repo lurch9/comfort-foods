@@ -1,25 +1,40 @@
-// backend/routes/orderRoutes.js
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 const Order = require('../models/Order');
+const io = require('../server'); // Import the io instance
 
 // Create a new order
 router.post('/', protect, async (req, res) => {
   try {
     const { items, total, name, street, city, state, zip } = req.body;
-    
-    if (items && items.length === 0) {
+
+    if (!items || items.length === 0) {
       res.status(400).json({ message: 'No order items' });
       return;
     }
 
+    console.log('Received items:', items);
+
+    // Validate product IDs
+    const orderItems = items.map(item => {
+      if (!item.product || !mongoose.Types.ObjectId.isValid(item.product)) {
+        console.error('Invalid product ID:', item.product);
+        throw new Error(`Invalid product ID: ${item.product}`);
+      }
+      return {
+        ...item,
+        product: new mongoose.Types.ObjectId(item.product)
+      };
+    });
+
     const order = new Order({
       user: req.user._id,
-      items,
+      items: orderItems,
       total,
       shippingAddress: { name, street, city, state, zip },
-      status: 'Pending', // Set initial status to 'Pending'
+      status: 'Pending',
     });
 
     const createdOrder = await order.save();
@@ -50,18 +65,37 @@ router.put('/:id/status', protect, async (req, res) => {
 
     if (order) {
       order.status = status;
-      const updatedOrder = await order.save();
+      const updatedOrder = await order.save({ validateModifiedOnly: true });
+
+      // Emit an event to notify clients about the status update
+      req.io.emit('orderStatusUpdated', {
+        orderId: order._id,
+        status: order.status,
+      });
+
       res.json(updatedOrder);
     } else {
       res.status(404).json({ message: 'Order not found' });
     }
   } catch (error) {
-    console.error(error);
+    console.error('Error updating order status:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

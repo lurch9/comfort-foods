@@ -48,5 +48,17 @@
   .cart-page .checkout-button:hover {
     background-color: #537b8d;
   }
+  .cart-page .reset-button {
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .cart-page .reset-button:hover {
+    background-color: #e0a800;
+  }
   
   
