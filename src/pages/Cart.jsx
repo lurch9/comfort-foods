@@ -1,4 +1,3 @@
-// src/components/Cart.jsx
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +12,7 @@ const Cart = () => {
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price, 0);
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   const handleCheckout = () => {
@@ -30,7 +29,8 @@ const Cart = () => {
               <li key={item.id}>
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
-                <p>{item.price}</p>
+                <p>Price: {item.price}</p>
+                <p>Quantity: {item.quantity}</p>
                 <button onClick={() => handleRemoveFromCart(item)}>Remove</button>
               </li>
             ))}
@@ -50,5 +50,3 @@ const Cart = () => {
 };
 
 export default Cart;
-
-

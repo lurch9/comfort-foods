@@ -1,60 +1,81 @@
 /* src/components/Header.css */
+.cart-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cart-count {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #eaeaea;
-  }
-  
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .nav-left, .nav-right {
-    display: flex;
-    align-items: center; /* Align items vertically */
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .nav-left li, .nav-right li {
-    margin: 0 10px;
-  }
-  
-  .nav-left li a, .nav-right li a {
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .nav-right li button {
-    background: none;
-    border: none;
-    color: #333;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  .logo h1 {
-    margin: 0;
-    font-size: 24px;
-    font-family: 'CustomFont', sans-serif; /* Placeholder for unique font */
-  }
-  
-  /* Add a placeholder for the custom font */
-  @font-face {
-    font-family: 'CustomFont';
-    src: url('/path/to/custom-font.woff2') format('woff2'); /* Update with your custom font path */
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-left li,
+.nav-right li {
+  margin: 0 10px;
+}
+
+.nav-left li a,
+.nav-right li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.nav-right li button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-family: 'CustomFont', sans-serif; /* Placeholder for unique font */
+}
+
+/* Add a placeholder for the custom font */
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/path/to/custom-font.woff2') format('woff2'); /* Update with your custom font path */
+}
+
   
