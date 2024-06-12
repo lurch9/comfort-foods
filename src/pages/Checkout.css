@@ -1,5 +1,6 @@
 .checkout-page {
     padding: 20px;
+    font-family: sans-serif;
   }
   
   .checkout-page h2 {
@@ -7,36 +8,48 @@
     margin-bottom: 20px;
   }
   
-  .checkout-page form {
-    display: flex;
-    flex-direction: column;
+  .checkout-table {
+    width: 100%;
+    border-collapse: collapse;
   }
   
-  .checkout-page label {
-    margin-bottom: 5px;
-  }
-  
-  .checkout-page input {
-    margin-bottom: 15px;
-    padding: 8px;
+  .checkout-table th, .checkout-table td {
     border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 10px;
+    text-align: left;
   }
   
-  .checkout-page button {
+  .checkout-table th {
+    background-color: #f8f8f8;
+  }
+  
+  .checkout-total {
+    margin-top: 20px;
+    font-size: 20px;
+  }
+  
+  .checkout-form label {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .checkout-form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+  
+  button {
     background-color: #28a745;
     color: #fff;
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    margin-top: 20px;
   }
   
-  .checkout-page button:hover {
+  button:hover {
     background-color: #218838;
-  }
-  
-  .error-message {
-    color: #dc3545;
-    margin-bottom: 15px;
   }
   
