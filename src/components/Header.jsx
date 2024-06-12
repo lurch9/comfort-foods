@@ -25,6 +25,9 @@ const Header = () => {
                 <Link to="/dashboard">Dashboard</Link>
               </li>
               <li>
+                <Link to="/cart">Cart</Link>
+              </li>
+              <li>
                 <button onClick={logout}>Logout</button>
               </li>
             </>
@@ -36,6 +39,7 @@ const Header = () => {
               <li>
                 <Link to="/register">Register</Link>
               </li>
+              
             </>
           )}
         </ul>

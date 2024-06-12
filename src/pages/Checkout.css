@@ -1,0 +1,42 @@
+.checkout-page {
+    padding: 20px;
+  }
+  
+  .checkout-page h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .checkout-page form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .checkout-page label {
+    margin-bottom: 5px;
+  }
+  
+  .checkout-page input {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .checkout-page button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .checkout-page button:hover {
+    background-color: #218838;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    margin-bottom: 15px;
+  }
+  

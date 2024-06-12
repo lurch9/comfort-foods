@@ -1,29 +1,31 @@
-/* src/pages/RestaurantMenu.css */
 .restaurant-menu {
-    padding: 20px;
-  }
-  
-  .restaurant-menu h2 {
-    font-size: 1.8em;
-    margin-bottom: 10px;
-  }
-  
-  .restaurant-menu ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .restaurant-menu li {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-  }
-  
-  .restaurant-menu h3 {
-    margin: 0;
-    font-size: 1.4em;
-  }
-  
-  .restaurant-menu p {
-    margin: 5px 0;
-  }
-  
+  padding: 20px;
+}
+
+.restaurant-menu h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.restaurant-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.restaurant-menu li {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.restaurant-menu button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.restaurant-menu button:hover {
+  background-color: #0056b3;
+}
