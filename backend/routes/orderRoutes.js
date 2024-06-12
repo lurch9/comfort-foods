@@ -8,7 +8,7 @@ const Order = require('../models/Order');
 router.post('/', protect, async (req, res) => {
   try {
     const { items, total, name, street, city, state, zip } = req.body;
-
+    
     if (items && items.length === 0) {
       res.status(400).json({ message: 'No order items' });
       return;
@@ -19,6 +19,7 @@ router.post('/', protect, async (req, res) => {
       items,
       total,
       shippingAddress: { name, street, city, state, zip },
+      status: 'Pending', // Set initial status to 'Pending'
     });
 
     const createdOrder = await order.save();
@@ -29,7 +30,7 @@ router.post('/', protect, async (req, res) => {
   }
 });
 
-// Get orders for the logged-in user
+// Get all orders for a user
 router.get('/', protect, async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id });
@@ -40,7 +41,28 @@ router.get('/', protect, async (req, res) => {
   }
 });
 
+// Update the status of an order
+router.put('/:id/status', protect, async (req, res) => {
+  const { status } = req.body;
+
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.status = status;
+      const updatedOrder = await order.save();
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 module.exports = router;
+
 
 
 

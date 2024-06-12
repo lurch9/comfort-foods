@@ -1,4 +1,4 @@
-// src/components/OrderHistory.jsx
+// src/pages/OrderHistory.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -26,28 +26,28 @@ const OrderHistory = () => {
   }, [user]);
 
   return (
-    <div className="order-history">
-      <h2>Your Order History</h2>
+    <div className="order-history-page">
+      <h2>Order History</h2>
       {orders.length > 0 ? (
         <ul>
           {orders.map((order) => (
             <li key={order._id}>
-              <h3>Order ID: {order._id}</h3>
-              <p>Order Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+              <h3>Order #{order._id}</h3>
+              <p>Status: {order.status}</p>
+              <p>Total: ${order.total}</p>
               <h4>Items:</h4>
               <ul>
-                {order.items.map((item, index) => (
-                  <li key={index}>
-                    {item.quantity} x {item.name} - ${item.price.toFixed(2)}
+                {order.items.map((item) => (
+                  <li key={item.product}>
+                    {item.name} - {item.quantity} x ${item.price}
                   </li>
                 ))}
               </ul>
-              <p>Total: ${order.total.toFixed(2)}</p>
             </li>
           ))}
         </ul>
       ) : (
-        <p>You have no order history.</p>
+        <p>You have no past orders.</p>
       )}
     </div>
   );

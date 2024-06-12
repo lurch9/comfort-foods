@@ -1,21 +1,31 @@
 /* src/pages/OrderHistory.css */
-.order-history {
+.order-history-page {
     padding: 20px;
   }
   
-  .order-history h2 {
+  .order-history-page h2 {
     font-size: 24px;
     margin-bottom: 20px;
   }
   
-  .order-history ul {
+  .order-history-page ul {
     list-style: none;
     padding: 0;
   }
   
-  .order-history li {
+  .order-history-page li {
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
+  }
+  
+  .order-history-page h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .order-history-page h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
   }
   
