@@ -1,64 +1,75 @@
 .cart-page {
-    padding: 20px;
-    font-family: sans-serif;
+    width: 80%;
+    margin: 0 auto;
   }
   
-  .cart-page h2 {
-    font-size: 24px;
+  .cart-item {
     margin-bottom: 20px;
-  }
-  
-  .cart-page ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .cart-page li {
-    border: 1px solid #ccc;
     padding: 10px;
-    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
   }
   
-  .cart-page button {
-    background-color: #c82333;
-    color: #fff;
+  .add-button, .remove-button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
     border: none;
-    padding: 10px 20px;
+    border-radius: 5px;
     cursor: pointer;
   }
   
-  .cart-page button:hover {
-    background-color: #81444a;
+  .remove-button {
+    background-color: #dc3545;
+  }
+  
+  .add-button:hover, .remove-button:hover {
+    opacity: 0.8;
+  }
+  
+  .checkout-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .checkout-button:hover {
+    opacity: 0.8;
+  }
+  
+  .cart-item select {
+    margin: 0 5px;
+  }
+  
+  .custom-quantity-input {
+    width: 50px;
+    text-align: center;
+    margin: 0 5px;
+  }
+  
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
   }
   
   .cart-total {
     margin-top: 20px;
-    font-size: 20px;
+    font-size: 18px;
+    font-weight: bold;
   }
   
-  .cart-page .checkout-button {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-top: 20px;
+  .cart-item p {
+    margin: 5px 0;
   }
   
-  .cart-page .checkout-button:hover {
-    background-color: #537b8d;
+  .cart-item h3 {
+    margin-bottom: 10px;
   }
-  .cart-page .reset-button {
-    background-color: #ffc107;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .cart-page .reset-button:hover {
-    background-color: #e0a800;
-  }
-  
   

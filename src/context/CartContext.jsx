@@ -14,31 +14,12 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  useEffect(() => {
-    const sessionId = sessionStorage.getItem('sessionId');
-    if (!sessionId) {
-      const newSessionId = Date.now().toString();
-      sessionStorage.setItem('sessionId', newSessionId);
-    }
-
-    const handleBeforeUnload = () => {
-      sessionStorage.removeItem('sessionId');
-      const sessionIds = Object.keys(sessionStorage);
-      if (sessionIds.length === 0) {
-        localStorage.removeItem('cart');
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
-
   const addToCart = (item) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((i) => i.id === item.id);
+      const existingItem = prevCart.find((i) => i.product === item.product);
       if (existingItem) {
         return prevCart.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+          i.product === item.product ? { ...i, quantity: i.quantity + 1 } : i
         );
       } else {
         return [...prevCart, { ...item, quantity: 1 }];
@@ -48,15 +29,23 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = (item) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find((i) => i.id === item.id);
+      const existingItem = prevCart.find((i) => i.product === item.product);
       if (existingItem.quantity === 1) {
-        return prevCart.filter((i) => i.id !== item.id);
+        return prevCart.filter((i) => i.product !== item.product);
       } else {
         return prevCart.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
+          i.product === item.product ? { ...i, quantity: i.quantity - 1 } : i
         );
       }
     });
+  };
+
+  const updateCartQuantity = (item, quantity) => {
+    setCart((prevCart) =>
+      prevCart.map((i) =>
+        i.product === item.product ? { ...i, quantity: quantity } : i
+      )
+    );
   };
 
   const clearCart = () => {
@@ -65,11 +54,9 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, addToCart, updateCartQuantity, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
 };
-
-
 

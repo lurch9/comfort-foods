@@ -1,4 +1,3 @@
-// src/pages/OrderHistory.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -18,7 +17,9 @@ const OrderHistory = () => {
             Authorization: `Bearer ${user.token}`,
           },
         });
-        setOrders(response.data);
+        // Sort orders by date in descending order
+        const sortedOrders = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setOrders(sortedOrders);
       } catch (error) {
         console.error('Error fetching orders:', error);
       }
@@ -51,7 +52,7 @@ const OrderHistory = () => {
       {orders.length > 0 ? (
         <ul>
           {orders.map((order) => (
-            <li key={order._id}>
+            <li key={order._id} className="order-item">
               <h3>Order #{order._id}</h3>
               <p>Status: {order.status}</p>
               <p>Total: ${order.total}</p>
@@ -74,5 +75,6 @@ const OrderHistory = () => {
 };
 
 export default OrderHistory;
+
 
 
