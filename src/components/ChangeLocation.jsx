@@ -1,7 +1,7 @@
 // src/components/ChangeLocation.jsx
 import React, { useState } from 'react';
 import { useLocationContext } from '../context/LocationContext';
-import '../pages/form.css';
+import '../Styles/form.css';
 
 const ChangeLocation = () => {
   const { updateLocation } = useLocationContext();

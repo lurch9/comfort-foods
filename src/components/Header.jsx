@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { useCart } from '../context/CartContext';
-import './Header.css';
+import '../Styles/Header.css';
 
 const Header = () => {
   const { user, logout } = useAuth();
