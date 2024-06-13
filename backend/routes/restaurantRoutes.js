@@ -1,8 +1,10 @@
 // backend/routes/restaurantRoutes.js
 const express = require('express');
+const { getRestaurants, getRestaurantById } = require('../controllers/restaurantController');
 const router = express.Router();
-const { getRestaurants } = require('../controllers/restaurantController');
 
-router.get('/restaurants', getRestaurants);
+router.get('/', getRestaurants);
+router.get('/:id', getRestaurantById);
 
 module.exports = router;
+

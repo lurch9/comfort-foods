@@ -1,15 +1,27 @@
 // backend/controllers/restaurantController.js
-const getRestaurants = (req, res) => {
-    const { zip } = req.query;
-  
-    // Dummy data for demonstration purposes
-    const restaurants = [
-      { id: 1, name: 'Restaurant A', description: `Great food in ${zip}` },
-      { id: 2, name: 'Restaurant B', description: `Delicious meals in ${zip}` },
-    ];
-  
+const Restaurant = require('../models/Restaurant');
+
+const getRestaurants = async (req, res) => {
+  try {
+    const restaurants = await Restaurant.find();
     res.json(restaurants);
-  };
-  
-  module.exports = { getRestaurants };
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+const getRestaurantById = async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+    if (!restaurant) {
+      return res.status(404).json({ message: 'Restaurant not found' });
+    }
+    res.json(restaurant);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+module.exports = { getRestaurants, getRestaurantById };
+
   

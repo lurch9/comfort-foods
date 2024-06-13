@@ -15,6 +15,11 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (item) => {
+    if (!item.product || !item.name || !item.price || !item.restaurant) {
+      console.error('Invalid item added to cart:', item);
+      return;
+    }
+
     setCart((prevCart) => {
       const existingItem = prevCart.find((i) => i.product === item.product);
       if (existingItem) {
@@ -59,4 +64,6 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
+
 

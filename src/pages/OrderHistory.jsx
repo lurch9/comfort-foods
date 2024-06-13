@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useSocket } from '../context/SocketContext';
+import { Link } from 'react-router-dom';
 import '../Styles/OrderHistory.css';
 
 const OrderHistory = () => {
@@ -55,15 +56,18 @@ const OrderHistory = () => {
             <li key={order._id} className="order-item">
               <h3>Order #{order._id}</h3>
               <p>Status: {order.status}</p>
-              <p>Total: ${order.total}</p>
+              <p>Total: ${order.total.toFixed(2)}</p>
               <h4>Items:</h4>
               <ul>
                 {order.items.map((item) => (
                   <li key={item.product}>
-                    {item.name} - {item.quantity} x ${item.price}
+                    {item.name} - {item.quantity} x ${item.price.toFixed(2)}
                   </li>
                 ))}
               </ul>
+              <Link to={`/order/${order._id}`}>
+                <button>View Order</button>
+              </Link>
             </li>
           ))}
         </ul>
@@ -75,6 +79,9 @@ const OrderHistory = () => {
 };
 
 export default OrderHistory;
+
+
+
 
 
 

@@ -49,6 +49,14 @@ const Header = () => {
             </>
           ) : (
             <>
+            <li>
+                <Link to="/cart">
+                  <div className="cart-icon">
+                    <FontAwesomeIcon icon={faShoppingCart} />
+                    {getTotalItems() > 0 && <span className="cart-count">{getTotalItems()}</span>}
+                  </div>
+                </Link>
+              </li>
               <li>
                 <Link to="/login">Login</Link>
               </li>

@@ -1,10 +1,10 @@
-// backend/server.js
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const restaurantRoutes = require('./routes/restaurantRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const menuRoutes = require('./routes/menuRoutes'); // Add this line
 const cors = require('cors');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const http = require('http');
@@ -35,7 +35,8 @@ app.use(express.json());
 
 app.use('/api/users', userRoutes);
 app.use('/api/restaurants', restaurantRoutes);
-app.use('/api/orders', orderRoutes);
+app.use('/api/order', orderRoutes);
+app.use('/api/menus', menuRoutes); // Add this line
 
 app.use(errorHandler);
 

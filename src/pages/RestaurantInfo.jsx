@@ -1,7 +1,6 @@
-// src/pages/RestaurantInfo.jsx
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import mockRestaurants from '../mockData/mockRestaurants.json';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import '../Styles/RestaurantInfo.css';
 
 const RestaurantInfo = () => {
@@ -9,9 +8,13 @@ const RestaurantInfo = () => {
   const [restaurant, setRestaurant] = useState(null);
 
   useEffect(() => {
-    const fetchRestaurant = () => {
-      const restaurantData = mockRestaurants.find(rest => rest.id === id);
-      setRestaurant(restaurantData);
+    const fetchRestaurant = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/restaurants/${id}`);
+        setRestaurant(response.data);
+      } catch (error) {
+        console.error('Error fetching restaurant:', error);
+      }
     };
 
     fetchRestaurant();
@@ -23,11 +26,9 @@ const RestaurantInfo = () => {
 
   return (
     <div className="restaurant-info">
-      <h1>{restaurant.name}</h1>
-      <p>{restaurant.description}</p>
-      <p>Address: {restaurant.address}</p>
-      <p>Contact: {restaurant.contact}</p>
-      <Link to={`/restaurants/${restaurant.id}/menu`}>View Menu</Link>
+      <h2>{restaurant.name}</h2>
+      <p>{restaurant.address.street}, {restaurant.address.city}, {restaurant.address.state} {restaurant.address.zip}</p>
+      <p>{restaurant.contact}</p>
     </div>
   );
 };

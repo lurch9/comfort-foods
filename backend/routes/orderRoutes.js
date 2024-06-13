@@ -3,45 +3,54 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 const Order = require('../models/Order');
-const io = require('../server'); // Import the io instance
+const Product = require('../models/Product');
 
 // Create a new order
 router.post('/', protect, async (req, res) => {
   try {
-    const { items, total, name, street, city, state, zip } = req.body;
+    const { items, total, subtotal, taxes, deliveryFee, shippingAddress, customer } = req.body;
 
     if (!items || items.length === 0) {
       res.status(400).json({ message: 'No order items' });
       return;
     }
 
-    console.log('Received items:', items);
-
-    // Validate product IDs
-    const orderItems = items.map(item => {
-      if (!item.product || !mongoose.Types.ObjectId.isValid(item.product)) {
-        console.error('Invalid product ID:', item.product);
-        throw new Error(`Invalid product ID: ${item.product}`);
-      }
-      return {
-        ...item,
-        product: new mongoose.Types.ObjectId(item.product)
-      };
-    });
+    // Validate product IDs and fetch products
+    const orderItems = await Promise.all(
+      items.map(async (item) => {
+        if (!item.product || !mongoose.Types.ObjectId.isValid(item.product)) {
+          throw new Error(`Invalid product ID: ${item.product}`);
+        }
+        const product = await Product.findById(item.product);
+        if (!product) {
+          throw new Error(`Product not found: ${item.product}`);
+        }
+        return {
+          ...item,
+          product: product._id,
+          name: product.name,
+          price: product.price,
+        };
+      })
+    );
 
     const order = new Order({
       user: req.user._id,
       items: orderItems,
       total,
-      shippingAddress: { name, street, city, state, zip },
+      subtotal,
+      taxes,
+      deliveryFee,
+      shippingAddress,
       status: 'Pending',
+      customer: customer // Adding customer field
     });
 
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error('Error creating order:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 });
 
@@ -51,8 +60,25 @@ router.get('/', protect, async (req, res) => {
     const orders = await Order.find({ user: req.user._id });
     res.json(orders);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching orders:', error);
     res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id)
+      .populate('user', 'name email')
+      .populate('items.product', 'name description price');
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    res.json(order);
+  } catch (error) {
+    console.error('Error fetching order:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -84,6 +110,16 @@ router.put('/:id/status', protect, async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
 
 
 

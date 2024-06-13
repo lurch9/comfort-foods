@@ -1,37 +1,59 @@
-/* src/components/RestaurantList.css */
+.restaurant-list-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-list-page h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.zip-code-form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.zip-code-form label {
+  margin-right: 10px;
+}
+
+.zip-code-form input {
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.zip-code-form button {
+  padding: 5px 10px;
+}
+
 .restaurant-list {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .restaurant-list h2 {
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  
-  .restaurant-list ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .restaurant-list li {
-    border-bottom: 1px solid #ccc;
-    padding: 1rem 0;
-  }
-  
-  .restaurant-list li:last-child {
-    border-bottom: none;
-  }
-  
-  .restaurant-list h3 {
-    margin: 0 0 0.5rem;
-  }
-  
-  .restaurant-list p {
-    margin: 0;
-  }
-  
+  list-style-type: none;
+  padding: 0;
+}
+
+.restaurant-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.restaurant-item h3 {
+  margin: 0;
+}
+
+.restaurant-item p {
+  margin: 5px 0;
+}
+
+.restaurant-item a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.restaurant-item a:hover {
+  text-decoration: underline;
+}

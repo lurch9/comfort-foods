@@ -1,4 +1,3 @@
-// src/components/Checkout.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
@@ -18,8 +17,11 @@ const Checkout = () => {
     zip: '',
     cardNumber: '',
     expiryDate: '',
-    cvc: ''
+    cvc: '',
   });
+
+  const deliveryFee = 5.0; // Flat delivery fee
+  const taxRate = 0.08; // 8% tax rate
 
   useEffect(() => {
     if (user) {
@@ -31,7 +33,7 @@ const Checkout = () => {
         zip: user.zip || '',
         cardNumber: '',
         expiryDate: '',
-        cvc: ''
+        cvc: '',
       });
     }
   }, [user]);
@@ -40,26 +42,37 @@ const Checkout = () => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      const subtotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+      const taxes = subtotal * taxRate;
+      const total = subtotal + taxes + deliveryFee;
+
       const order = {
         items: cart.map((item) => ({
-          product: item.product, // Ensure the `product` field is correctly mapped
+          product: item.product,
           name: item.name,
           quantity: item.quantity,
           price: item.price,
+          restaurant: item.restaurant,
         })),
-        total: cart.reduce((total, item) => total + item.price * item.quantity, 0),
-        name: formData.name,
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        zip: formData.zip,
+        total,
+        subtotal,
+        taxes,
+        deliveryFee,
+        shippingAddress: {
+          name: formData.name,
+          street: formData.street,
+          city: formData.city,
+          state: formData.state,
+          zip: formData.zip,
+        },
+        customer: user._id, // Adding the user ID as customer
       };
 
       const response = await axios.post('http://localhost:5000/api/orders', order, {
@@ -77,8 +90,14 @@ const Checkout = () => {
     }
   };
 
+  const calculateSubtotal = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+  };
+
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const subtotal = calculateSubtotal();
+    const taxes = (subtotal * taxRate).toFixed(2);
+    return (parseFloat(subtotal) + parseFloat(taxes) + deliveryFee).toFixed(2);
   };
 
   return (
@@ -104,6 +123,9 @@ const Checkout = () => {
           </tbody>
         </table>
         <div className="checkout-total">
+          <h3>Subtotal: ${calculateSubtotal()}</h3>
+          <h3>Taxes: ${(calculateSubtotal() * taxRate).toFixed(2)}</h3>
+          <h3>Delivery Fee: ${deliveryFee.toFixed(2)}</h3>
           <h3>Total: ${calculateTotal()}</h3>
         </div>
         <div className="checkout-details">
@@ -182,6 +204,16 @@ const Checkout = () => {
 };
 
 export default Checkout;
+
+
+
+
+
+
+
+
+
+
 
 
 

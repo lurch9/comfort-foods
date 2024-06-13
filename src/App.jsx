@@ -13,6 +13,7 @@ import RestaurantInfo from './pages/RestaurantInfo';
 import RestaurantMenu from './pages/RestaurantMenu';
 import Dashboard from './pages/Dashboard';
 import OrderHistory from './pages/OrderHistory';
+import OrderDetails from './pages/OrderDetails';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import { SocketProvider } from './context/SocketContext';
@@ -28,11 +29,11 @@ function App() {
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/restaurants" element={<RestaurantList />} />
-        <Route path="/restaurants/:id" element={<RestaurantInfo />} />
-        <Route path="/restaurants/:id/menu" element={<RestaurantMenu />} />
+        <Route path="/restaurants/:restaurantId/menu" element={<RestaurantMenu />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-history" element={<PrivateRoute><OrderHistory /></PrivateRoute>} />
+        <Route path="/order/:id" element={<OrderDetails />} />
       </Routes>
     </SocketProvider>
   );

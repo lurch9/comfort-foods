@@ -1,11 +1,9 @@
-// backend/models/Order.js
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: 'User',
     },
     items: [
@@ -18,6 +16,11 @@ const orderSchema = mongoose.Schema(
           required: true,
           ref: 'Product',
         },
+        restaurant: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'Restaurant',
+        },
       },
     ],
     shippingAddress: {
@@ -27,6 +30,18 @@ const orderSchema = mongoose.Schema(
       state: { type: String, required: true },
       zip: { type: String, required: true },
     },
+    subtotal: {
+      type: Number,
+      required: true,
+    },
+    taxes: {
+      type: Number,
+      required: true,
+    },
+    deliveryFee: {
+      type: Number,
+      required: true,
+    },
     total: {
       type: Number,
       required: true,
@@ -34,7 +49,12 @@ const orderSchema = mongoose.Schema(
     status: {
       type: String,
       required: true,
-      default: 'Pending', // Add default value
+      default: 'Pending',
+    },
+    customer: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Customer',
+      required: true,
     },
   },
   {
@@ -45,6 +65,8 @@ const orderSchema = mongoose.Schema(
 const Order = mongoose.model('Order', orderSchema);
 
 module.exports = Order;
+
+
 
 
 
