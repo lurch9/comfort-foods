@@ -12,6 +12,7 @@ import RestaurantList from './pages/RestaurantList';
 import RestaurantInfo from './pages/RestaurantInfo';
 import RestaurantMenu from './pages/RestaurantMenu';
 import Dashboard from './pages/Dashboard';
+import ManagerDashboard from './pages/ManagerDashboard';
 import OrderHistory from './pages/OrderHistory';
 import OrderDetails from './pages/OrderDetails';
 import PrivateRoute from './components/PrivateRoute';
@@ -28,6 +29,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+        <Route path="/manager-dashboard" element={<PrivateRoute><ManagerDashboard /></PrivateRoute>} />
         <Route path="/restaurants" element={<RestaurantList />} />
         <Route path="/restaurants/:restaurantId/menu" element={<RestaurantMenu />} />
         <Route path="/cart" element={<Cart />} />

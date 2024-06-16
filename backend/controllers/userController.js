@@ -2,8 +2,10 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
+// Register a new user or manager
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password, street, city, state, zip, dateOfBirth } = req.body;
+  console.log('Received registration data:', req.body); // Log the incoming request data
+  const { name, email, password, street, city, state, zip, dateOfBirth, role } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -21,6 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
     state,
     zip,
     dateOfBirth,
+    role, // 'user' or 'manager'
   });
 
   if (user) {
@@ -28,11 +31,7 @@ const registerUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      street: user.street,
-      city: user.city,
-      state: user.state,
-      zip: user.zip,
-      dateOfBirth: user.dateOfBirth,
+      role: user.role,
       token: generateToken(user._id),
     });
   } else {
@@ -43,7 +42,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
@@ -51,11 +49,7 @@ const loginUser = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       email: user.email,
-      street: user.street,
-      city: user.city,
-      state: user.state,
-      zip: user.zip,
-      dateOfBirth: user.dateOfBirth,
+      role: user.role, // Ensure role is included
       token: generateToken(user._id),
     });
   } else {
@@ -77,6 +71,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
       state: user.state,
       zip: user.zip,
       dateOfBirth: user.dateOfBirth,
+      role:user.role,
     });
   } else {
     res.status(404);
@@ -96,19 +91,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     user.zip = req.body.zip || user.zip;
     user.dateOfBirth = req.body.dateOfBirth || user.dateOfBirth;
 
-    if (req.body.currentPassword) {
-      if (await user.matchPassword(req.body.currentPassword)) {
-        if (req.body.newPassword) {
-          user.password = req.body.newPassword;
-        }
-      } else {
-        res.status(400);
-        throw new Error('Current password is incorrect');
-      }
+    if (req.body.password) {
+      user.password = req.body.password;
     }
 
     const updatedUser = await user.save();
-
     res.json({
       _id: updatedUser._id,
       name: updatedUser.name,
@@ -126,7 +113,11 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };
+module.exports = {
+  registerUser,
+  loginUser,
+  getUserProfile,
+  updateUserProfile,
+};
 
 
-module.exports = { registerUser, loginUser, getUserProfile, updateUserProfile };

@@ -1,27 +1,42 @@
-// backend/controllers/restaurantController.js
+const asyncHandler = require('express-async-handler');
 const Restaurant = require('../models/Restaurant');
 
-const getRestaurants = async (req, res) => {
-  try {
-    const restaurants = await Restaurant.find();
-    res.json(restaurants);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
-  }
-};
+// Create a new restaurant
+const createRestaurant = asyncHandler(async (req, res) => {
+  const { name, street, city, state, zip, contact } = req.body;
 
-const getRestaurantById = async (req, res) => {
-  try {
-    const restaurant = await Restaurant.findById(req.params.id);
-    if (!restaurant) {
-      return res.status(404).json({ message: 'Restaurant not found' });
-    }
+  const restaurant = await Restaurant.create({
+    name,
+    address: {
+      street,
+      city,
+      state,
+      zip,
+    },
+    contact,
+    manager: req.user._id, // Assuming the manager is the logged-in user
+  });
+
+  if (restaurant) {
+    res.status(201).json(restaurant);
+  } else {
+    res.status(400);
+    throw new Error('Invalid restaurant data');
+  }
+});
+
+const getRestaurantForManager = asyncHandler(async (req, res) => {
+  const restaurant = await Restaurant.findOne({ manager: req.user._id });
+  if (restaurant) {
     res.json(restaurant);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+  } else {
+    res.status(404);
+    throw new Error('Restaurant not found');
   }
-};
+});
 
-module.exports = { getRestaurants, getRestaurantById };
+module.exports = { createRestaurant, getRestaurantForManager };
+
+
 
   

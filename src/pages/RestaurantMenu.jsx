@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
+import { UserContext } from '../context/UserContext';
 
 const RestaurantMenu = () => {
   const { restaurantId } = useParams();
   const { addToCart } = useCart();
+  const { user } = useContext(UserContext); // Get the current user info
   const [menu, setMenu] = useState([]);
   const [error, setError] = useState(null);
 
@@ -16,7 +18,6 @@ const RestaurantMenu = () => {
         const menuData = response.data;
         console.log('Menu data response:', menuData);
 
-        // Since the response is already an array, set it directly to the menu state
         if (Array.isArray(menuData) && menuData.every(item => item.name && item.description && item.price)) {
           setMenu(menuData);
         } else {
@@ -40,6 +41,21 @@ const RestaurantMenu = () => {
     });
   };
 
+  const handleRemoveProduct = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`http://localhost:5000/api/menus/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMenu(menu.filter(item => item._id !== productId));
+    } catch (error) {
+      console.error(error);
+      setError('Failed to remove the product');
+    }
+  };
+
   if (error) {
     return <p>Error fetching menu items: {error}</p>;
   }
@@ -58,6 +74,9 @@ const RestaurantMenu = () => {
             <p>{item.description}</p>
             <p>${item.price}</p>
             <button onClick={() => handleAddToCart(item)}>Add to Cart</button>
+            {user && user.role === 'manager' && (
+              <button onClick={() => handleRemoveProduct(item._id)}>Remove</button>
+            )}
           </li>
         ))}
       </ul>
@@ -66,6 +85,8 @@ const RestaurantMenu = () => {
 };
 
 export default RestaurantMenu;
+
+
 
 
 

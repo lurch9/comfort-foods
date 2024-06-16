@@ -1,171 +1,69 @@
-// src/pages/Register.jsx
-import React from 'react';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import React, { useState } from 'react';
 import axios from 'axios';
-import '../Styles/form.css';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const formik = useFormik({
-    initialValues: {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      street: '',
-      city: '',
-      state: '',
-      zip: '',
-      dateOfBirth: ''
-    },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .max(15, 'Must be 15 characters or less')
-        .required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required'),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Required'),
-      street: Yup.string().required('Required'),
-      city: Yup.string().required('Required'),
-      state: Yup.string().required('Required'),
-      zip: Yup.string().required('Required'),
-      dateOfBirth: Yup.date().required('Required'),
-    }),
-    onSubmit: async (values, { setSubmitting, setErrors }) => {
-      try {
-        const response = await axios.post('http://localhost:5000/api/users/register', values);
-        login(response.data); // Use login method
-        navigate('/restaurants');
-      } catch (error) {
-        setErrors({ submit: error.response.data.message || error.message });
-      }
-      setSubmitting(false);
-    },
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
+    dateOfBirth: '',
+    role: 'user', // default to 'user'
   });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:5000/api/users/register', formData);
+      const userData = response.data;
+      setUser(userData); // Set the user data in context
+      localStorage.setItem('token', userData.token); // Save the token to local storage
+
+      // Redirect based on user role
+      if (userData.role === 'manager') {
+        navigate('/manager-dashboard');
+      } else {
+        navigate('/restaurants');
+      }
+    } catch (error) {
+      setError(error.response ? error.response.data.message : error.message);
+    }
+  };
 
   return (
-    <div className="form-container">
+    <div>
       <h2>Register</h2>
-      <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input
-            id="name"
-            type="text"
-            {...formik.getFieldProps('name')}
-          />
-          {formik.touched.name && formik.errors.name ? (
-            <div className="error-message">{formik.errors.name}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            id="email"
-            type="email"
-            {...formik.getFieldProps('email')}
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <div className="error-message">{formik.errors.email}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            id="password"
-            type="password"
-            {...formik.getFieldProps('password')}
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <div className="error-message">{formik.errors.password}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="confirmPassword">Confirm Password:</label>
-          <input
-            id="confirmPassword"
-            type="password"
-            {...formik.getFieldProps('confirmPassword')}
-          />
-          {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-            <div className="error-message">{formik.errors.confirmPassword}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="street">Street:</label>
-          <input
-            id="street"
-            type="text"
-            {...formik.getFieldProps('street')}
-          />
-          {formik.touched.street && formik.errors.street ? (
-            <div className="error-message">{formik.errors.street}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="city">City:</label>
-          <input
-            id="city"
-            type="text"
-            {...formik.getFieldProps('city')}
-          />
-          {formik.touched.city && formik.errors.city ? (
-            <div className="error-message">{formik.errors.city}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="state">State:</label>
-          <input
-            id="state"
-            type="text"
-            {...formik.getFieldProps('state')}
-          />
-          {formik.touched.state && formik.errors.state ? (
-            <div className="error-message">{formik.errors.state}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="zip">Zip Code:</label>
-          <input
-            id="zip"
-            type="text"
-            {...formik.getFieldProps('zip')}
-          />
-          {formik.touched.zip && formik.errors.zip ? (
-            <div className="error-message">{formik.errors.zip}</div>
-          ) : null}
-        </div>
-        <div>
-          <label htmlFor="dateOfBirth">Date of Birth:</label>
-          <input
-            id="dateOfBirth"
-            type="date"
-            {...formik.getFieldProps('dateOfBirth')}
-          />
-          {formik.touched.dateOfBirth && formik.errors.dateOfBirth ? (
-            <div className="error-message">{formik.errors.dateOfBirth}</div>
-          ) : null}
-        </div>
-        <button type="submit" disabled={formik.isSubmitting}>
-          Register
-        </button>
-        {formik.errors.submit && <div className="error-message">{formik.errors.submit}</div>}
+      {error && <p className="error">{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
+        <input type="text" name="street" placeholder="Street" onChange={handleChange} required />
+        <input type="text" name="city" placeholder="City" onChange={handleChange} required />
+        <input type="text" name="state" placeholder="State" onChange={handleChange} required />
+        <input type="text" name="zip" placeholder="ZIP Code" onChange={handleChange} required />
+        <input type="date" name="dateOfBirth" placeholder="Date of Birth" onChange={handleChange} required />
+        <select name="role" onChange={handleChange} required>
+          <option value="user">User</option>
+          <option value="manager">Manager</option>
+        </select>
+        <button type="submit">Register</button>
       </form>
     </div>
   );
 };
 
 export default Register;
-
-
-
-
-
 

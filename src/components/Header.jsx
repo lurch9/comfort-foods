@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -22,18 +21,25 @@ const Header = () => {
           <li>
             <Link to="/">Home</Link>
           </li>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/order-history">Orders</Link>
-          </li>
+          {user && user.role !== 'guest' && (
+            <>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              {user.role === 'manager' && (
+                <li><Link to="/manager-dashboard">Manager Dashboard</Link></li>
+              )}
+              <li>
+                <Link to="/order-history">Orders</Link>
+              </li>
+            </>
+          )}
         </ul>
         <div className="logo">
           <h1>Comfort Foods</h1>
         </div>
         <ul className="nav-right">
-          {user ? (
+          {user && user.role !== 'guest' ? (
             <>
               <li>
                 <Link to="/cart">
@@ -44,12 +50,12 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/login" onClick={logout}>Logout</Link>
+                <Link to="/" onClick={logout}>Logout</Link>
               </li>
             </>
           ) : (
             <>
-            <li>
+              <li>
                 <Link to="/cart">
                   <div className="cart-icon">
                     <FontAwesomeIcon icon={faShoppingCart} />
@@ -72,6 +78,8 @@ const Header = () => {
 };
 
 export default Header;
+
+
 
 
 

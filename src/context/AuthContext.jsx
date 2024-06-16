@@ -1,56 +1,57 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // Import uuid to generate unique IDs
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [guestId, setGuestId] = useState(null);
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      return { token, role: null }; // Initial state with token only, role will be determined after fetching user data
+    }
+    return { token: null, role: 'guest' }; // Default to 'guest' when no token is found
+  });
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    const storedGuestId = localStorage.getItem('guestId');
-    if (storedUser) {
-      setUser(storedUser);
-    }
-    if (storedGuestId) {
-      setGuestId(storedGuestId);
-    } else {
-      const newGuestId = uuidv4();
-      setGuestId(newGuestId);
-      localStorage.setItem('guestId', newGuestId);
-    }
+    const fetchUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await axios.get('http://localhost:5000/api/users/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser({ ...response.data, token });
+        } catch (error) {
+          console.error('Failed to fetch user profile:', error);
+          logout(); // Logout on failure to fetch user profile
+        }
+      }
+    };
+
+    fetchUser();
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
-    }
-  }, [user]);
-
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
-
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
-    setGuestId(uuidv4()); // Generate a new guest ID on logout
-    localStorage.setItem('guestId', guestId);
+    localStorage.removeItem('token');
+    setUser({ token: null, role: 'guest' });
   };
 
   return (
-    <AuthContext.Provider value={{ user, guestId, login, logout, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+export default AuthProvider;
+
+
+
+
+
 
 

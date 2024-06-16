@@ -1,10 +1,12 @@
-// backend/routes/restaurantRoutes.js
 const express = require('express');
-const { getRestaurants, getRestaurantById } = require('../controllers/restaurantController');
+const { createRestaurant, getRestaurantForManager } = require('../controllers/restaurantController');
+const { restaurantProtect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.get('/', getRestaurants);
-router.get('/:id', getRestaurantById);
+// Create a new restaurant
+router.post('/', restaurantProtect, createRestaurant);
+router.get('/me', restaurantProtect, getRestaurantForManager);
 
 module.exports = router;
+
 

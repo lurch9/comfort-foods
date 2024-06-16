@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -25,7 +24,11 @@ const Login = () => {
         const response = await axios.post('http://localhost:5000/api/users/login', values);
         if (response.data) {
           setUser(response.data);
-          navigate('/restaurants');
+          if (response.data.role === 'manager') {
+            navigate('/manager-dashboard');
+          } else {
+            navigate('/restaurants');
+          }
         } else {
           setErrors({ submit: 'Login failed. Please try again.' });
         }
