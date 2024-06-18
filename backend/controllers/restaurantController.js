@@ -1,7 +1,28 @@
 const asyncHandler = require('express-async-handler');
 const Restaurant = require('../models/Restaurant');
 
-// Get manager's restaurant
+// Create a new restaurant
+const createRestaurant = asyncHandler(async (req, res) => {
+  const { name, street, city, state, zip, contact } = req.body;
+  const restaurant = new Restaurant({
+    name,
+    address: { street, city, state, zip },
+    contact,
+    manager: req.user._id,
+  });
+
+  const createdRestaurant = await restaurant.save();
+
+  // Update the user with the restaurant ID if the user is a manager
+  if (req.user.role === 'manager') {
+    req.user.restaurantId = createdRestaurant._id;
+    await req.user.save();
+  }
+
+  res.status(201).json(createdRestaurant);
+});
+
+// Get the manager's restaurant
 const getMyRestaurant = asyncHandler(async (req, res) => {
   const restaurant = await Restaurant.findOne({ manager: req.user._id });
   if (restaurant) {
@@ -12,24 +33,27 @@ const getMyRestaurant = asyncHandler(async (req, res) => {
   }
 });
 
-// Create new restaurant
-const createRestaurant = asyncHandler(async (req, res) => {
-  const { name, street, city, state, zip, contact } = req.body;
+const deleteRestaurant = asyncHandler(async (req, res) => {
+  const restaurant = await Restaurant.findById(req.params.id);
 
-  const restaurant = new Restaurant({
-    manager: req.user._id,
-    name,
-    address: {
-      street,
-      city,
-      state,
-      zip
-    },
-    contact
-  });
+  if (restaurant) {
+    // Only the manager of the restaurant can delete it
+    if (restaurant.manager.toString() !== req.user._id.toString()) {
+      res.status(401);
+      throw new Error('Not authorized to delete this restaurant');
+    }
 
-  const createdRestaurant = await restaurant.save();
-  res.status(201).json(createdRestaurant);
+    await Restaurant.deleteOne({ _id: req.params.id });
+
+    // Clear the restaurantId field of the user
+    req.user.restaurantId = null;
+    await req.user.save();
+
+    res.json({ message: 'Restaurant removed' });
+  } else {
+    res.status(404);
+    throw new Error('Restaurant not found');
+  }
 });
 
 // Get restaurant by ID
@@ -63,6 +87,7 @@ const updateRestaurant = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  deleteRestaurant,
   getMyRestaurant,
   createRestaurant,
   getRestaurantById,

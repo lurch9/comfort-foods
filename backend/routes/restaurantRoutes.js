@@ -1,21 +1,24 @@
+// restaurantRoutes.js
 const express = require('express');
 const {
   createRestaurant,
   getMyRestaurant,
   getRestaurantById,
   updateRestaurant,
+  deleteRestaurant,
 } = require('../controllers/restaurantController');
 const { protect, managerProtect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-console.log('Imported functions:', { createRestaurant, getMyRestaurant, getRestaurantById, updateRestaurant });
-console.log('Imported middleware:', { protect, managerProtect });
-
 router.route('/').post(protect, managerProtect, createRestaurant);
 router.route('/me').get(protect, managerProtect, getMyRestaurant);
-router.route('/:id').get(protect, managerProtect, getRestaurantById).put(protect, managerProtect, updateRestaurant);
+router.route('/:id')
+  .get(protect, managerProtect, getRestaurantById)
+  .put(protect, managerProtect, updateRestaurant)
+  .delete(protect, managerProtect, deleteRestaurant);
 
 module.exports = router;
+
 
 
 

@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import '../Styles/Dashboard.css';
 
 const ManagerDashboard = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [restaurant, setRestaurant] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -51,8 +51,23 @@ const ManagerDashboard = () => {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setRestaurant(response.data);
+      setUser((prevUser) => ({ ...prevUser, restaurantId: response.data._id }));
     } catch (error) {
       setError(error.response ? error.response.data.message : error.message);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this restaurant?')) {
+      try {
+        await axios.delete(`http://localhost:5000/api/restaurants/${restaurant._id}`, {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        setRestaurant(null);
+        setUser((prevUser) => ({ ...prevUser, restaurantId: null }));
+      } catch (error) {
+        setError(error.response ? error.response.data.message : error.message);
+      }
     }
   };
 
@@ -73,7 +88,8 @@ const ManagerDashboard = () => {
           <p>Address: {`${restaurant.address.street}, ${restaurant.address.city}, ${restaurant.address.state}, ${restaurant.address.zip}`}</p>
           <p>Contact: {restaurant.contact}</p>
           <button onClick={() => navigate(`/edit-restaurant/${restaurant._id}`)}>Edit Restaurant</button>
-          <button onClick={() => navigate(`/restaurants/${restaurant._id}/menu`)}>Manage Menu</button>
+          <button onClick={() => navigate(`/manager-menus/${restaurant._id}`)}>Manage Menus</button>
+          <button onClick={handleDelete}>Delete Restaurant</button>
         </div>
       ) : (
         <div>
@@ -94,6 +110,10 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
+
+
+
 
 
 

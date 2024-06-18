@@ -1,72 +1,76 @@
-const Product = require('../models/Product');
-const Restaurant = require('../models/Restaurant');
+// controllers/menuController.js
 const asyncHandler = require('express-async-handler');
+const Menu = require('../models/Menu');
 
-// Add new product to menu
-const addProduct = asyncHandler(async (req, res) => {
-  const { name, description, price } = req.body;
-  const restaurantId = req.params.restaurantId;
+// Create a new menu
+const createMenu = asyncHandler(async (req, res) => {
+  const { name, restaurantId } = req.body;
 
-  const restaurant = await Restaurant.findById(restaurantId);
-
-  if (!restaurant) {
-    res.status(404);
-    throw new Error('Restaurant not found');
-  }
-
-  // Verify that the logged-in user is the manager of the restaurant
-  if (restaurant.manager.toString() !== req.user._id.toString()) {
-    res.status(401);
-    throw new Error('Not authorized to add products to this restaurant');
-  }
-
-  const product = new Product({
+  const menu = new Menu({
     name,
-    description,
-    price,
     restaurant: restaurantId,
+    items: [],
   });
 
-  const createdProduct = await product.save();
-  restaurant.menu.push(createdProduct._id);
-  await restaurant.save();
-
-  res.status(201).json(createdProduct);
+  const createdMenu = await menu.save();
+  res.status(201).json(createdMenu);
 });
 
-// Remove product from menu
-const removeProduct = asyncHandler(async (req, res) => {
-  const productId = req.params.productId;
-  const product = await Product.findById(productId);
+// Get all menus for a specific restaurant
+const getMenusByRestaurant = asyncHandler(async (req, res) => {
+  const menus = await Menu.find({ restaurant: req.params.restaurantId });
+  res.json(menus);
+});
 
-  if (!product) {
+// Get menu by ID
+const getMenuById = asyncHandler(async (req, res) => {
+  const menu = await Menu.findById(req.params.id);
+  if (menu) {
+    res.json(menu);
+  } else {
     res.status(404);
-    throw new Error('Product not found');
+    throw new Error('Menu not found');
   }
-
-  const restaurant = await Restaurant.findById(product.restaurant);
-
-  // Verify that the logged-in user is the manager of the restaurant
-  if (restaurant.manager.toString() !== req.user._id.toString()) {
-    res.status(401);
-    throw new Error('Not authorized to remove products from this restaurant');
-  }
-
-  await product.remove();
-  restaurant.menu = restaurant.menu.filter(item => item.toString() !== productId);
-  await restaurant.save();
-
-  res.json({ message: 'Product removed' });
 });
 
-// Get all products for a restaurant
-const getMenu = asyncHandler(async (req, res) => {
-  const restaurantId = req.params.restaurantId;
-  const products = await Product.find({ restaurant: restaurantId });
-  res.json(products);
+// Update menu
+const updateMenu = asyncHandler(async (req, res) => {
+  const menu = await Menu.findById(req.params.id);
+  if (menu) {
+    menu.name = req.body.name || menu.name;
+
+    if (req.body.items) {
+      menu.items = req.body.items;
+    }
+
+    const updatedMenu = await menu.save();
+    res.json(updatedMenu);
+  } else {
+    res.status(404);
+    throw new Error('Menu not found');
+  }
 });
 
-module.exports = { addProduct, removeProduct, getMenu };
+// Delete menu
+const deleteMenu = asyncHandler(async (req, res) => {
+  const menu = await Menu.findById(req.params.id);
+  if (menu) {
+    await menu.remove();
+    res.json({ message: 'Menu removed' });
+  } else {
+    res.status(404);
+    throw new Error('Menu not found');
+  }
+});
+
+module.exports = {
+  createMenu,
+  getMenusByRestaurant,
+  getMenuById,
+  updateMenu,
+  deleteMenu,
+};
+
 
 
 

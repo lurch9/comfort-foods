@@ -1,3 +1,4 @@
+// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const User = require('../models/User');
@@ -29,14 +30,13 @@ const managerProtect = asyncHandler(async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      console.log('Decoded token:', decoded); // Log the decoded token
       const user = await User.findById(decoded.id).select('-password');
-      console.log('Fetched user:', user); // Log the fetched user
+
       if (!user || user.role !== 'manager') {
-        console.log('User role:', user ? user.role : 'User not found');
         res.status(401);
         throw new Error('Not authorized as manager');
       }
+
       req.user = user;
       next();
     } catch (error) {
@@ -51,6 +51,7 @@ const managerProtect = asyncHandler(async (req, res, next) => {
 });
 
 module.exports = { protect, managerProtect };
+
 
 
 

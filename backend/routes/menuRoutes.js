@@ -1,14 +1,24 @@
+// routes/menuRoutes.js
 const express = require('express');
-const { addProduct, removeProduct, getMenu } = require('../controllers/menuController');
-const { managerProtect } = require('../middleware/authMiddleware');
+const {
+  createMenu,
+  getMenusByRestaurant,
+  getMenuById,
+  updateMenu,
+  deleteMenu,
+} = require('../controllers/menuController');
+const { protect, managerProtect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-// Only managers can add or remove products to/from the menu
-router.post('/:restaurantId', managerProtect, addProduct);
-router.delete('/:productId', managerProtect, removeProduct);
-router.get('/:restaurantId', getMenu);
+router.route('/').post(protect, managerProtect, createMenu);
+router.route('/restaurant/:restaurantId').get(protect, managerProtect, getMenusByRestaurant);
+router.route('/:id')
+  .get(protect, managerProtect, getMenuById)
+  .put(protect, managerProtect, updateMenu)
+  .delete(protect, managerProtect, deleteMenu);
 
 module.exports = router;
+
 
 
 

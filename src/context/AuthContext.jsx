@@ -32,22 +32,34 @@ const AuthProvider = ({ children }) => {
       }
     };
 
-    fetchUser();
-  }, []);
+    if (user.token && user.role === null) {
+      fetchUser();
+    }
+  }, [user.token]);
+
+  const login = (userData) => {
+    localStorage.setItem('token', userData.token);
+    setUser(userData);
+  };
 
   const logout = () => {
     localStorage.removeItem('token');
     setUser({ token: null, role: 'guest' });
   };
 
+  console.log('AuthContext - User:', user); // Debugging user
+
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export default AuthProvider;
+
+
+
 
 
 
