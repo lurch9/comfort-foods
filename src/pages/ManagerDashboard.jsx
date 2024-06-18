@@ -72,7 +72,7 @@ const ManagerDashboard = () => {
           <p>Restaurant Name: {restaurant.name}</p>
           <p>Address: {`${restaurant.address.street}, ${restaurant.address.city}, ${restaurant.address.state}, ${restaurant.address.zip}`}</p>
           <p>Contact: {restaurant.contact}</p>
-          <button onClick={() => navigate(`/restaurants/${restaurant._id}/edit`)}>Edit Restaurant</button>
+          <button onClick={() => navigate(`/edit-restaurant/${restaurant._id}`)}>Edit Restaurant</button>
           <button onClick={() => navigate(`/restaurants/${restaurant._id}/menu`)}>Manage Menu</button>
         </div>
       ) : (
@@ -94,6 +94,7 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
 
 
 

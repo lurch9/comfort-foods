@@ -22,7 +22,7 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-const restaurantProtect = asyncHandler(async (req, res, next) => {
+const managerProtect = asyncHandler(async (req, res, next) => {
   let token;
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -50,7 +50,8 @@ const restaurantProtect = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = { protect, restaurantProtect };
+module.exports = { protect, managerProtect };
+
 
 
 
