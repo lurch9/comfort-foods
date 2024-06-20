@@ -9,9 +9,9 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      return { token, role: null }; // Initial state with token only, role will be determined after fetching user data
+      return { token, role: null, restaurantId: null }; // Initial state with token only, role and restaurantId will be determined after fetching user data
     }
-    return { token: null, role: 'guest' }; // Default to 'guest' when no token is found
+    return { token: null, role: 'guest', restaurantId: null }; // Default to 'guest' when no token is found
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem('token');
-    setUser({ token: null, role: 'guest' });
+    setUser({ token: null, role: 'guest', restaurantId: null });
   };
 
   console.log('AuthContext - User:', user); // Debugging user
@@ -57,6 +57,10 @@ const AuthProvider = ({ children }) => {
 };
 
 export default AuthProvider;
+
+
+
+
 
 
 

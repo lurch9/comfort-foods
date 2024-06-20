@@ -1,31 +1,68 @@
-.restaurant-menu {
+/* src/Styles/RestaurantMenu.css */
+
+.menu-container {
+  width: 80%;
+  margin: 0 auto;
   padding: 20px;
+  text-align: center;
 }
 
-.restaurant-menu h2 {
-  font-size: 24px;
+.menu-title {
+  font-size: 2em;
   margin-bottom: 20px;
 }
 
-.restaurant-menu ul {
-  list-style: none;
-  padding: 0;
+.menu-box {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.restaurant-menu li {
-  border: 1px solid #ccc;
-  padding: 10px;
+.menu-name {
+  font-size: 1.5em;
   margin-bottom: 10px;
 }
 
-.restaurant-menu button {
+.menu-items {
+  list-style-type: none;
+  padding: 0;
+}
+
+.menu-item {
+  border-bottom: 1px solid #eee;
+  padding: 10px 0;
+  text-align: left;
+}
+
+.item-name {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.item-description {
+  color: #666;
+  margin: 5px 0;
+}
+
+.item-price {
+  color: #333;
+  margin: 5px 0;
+}
+
+.add-to-cart-button {
   background-color: #007bff;
   color: #fff;
   border: none;
   padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
-.restaurant-menu button:hover {
+.add-to-cart-button:hover {
   background-color: #0056b3;
 }
+

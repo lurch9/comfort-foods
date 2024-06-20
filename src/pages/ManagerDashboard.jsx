@@ -8,6 +8,7 @@ const ManagerDashboard = () => {
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const [restaurant, setRestaurant] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [newRestaurant, setNewRestaurant] = useState({
@@ -39,6 +40,34 @@ const ManagerDashboard = () => {
 
     fetchRestaurant();
   }, [user.token]);
+
+  useEffect(() => {
+    if (restaurant) {
+      const fetchOrders = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/orders/restaurant/${restaurant._id}`, {
+            headers: { Authorization: `Bearer ${user.token}` },
+          });
+          setOrders(response.data);
+        } catch (error) {
+          setError(error.response ? error.response.data.message : error.message);
+        }
+      };
+
+      fetchOrders();
+    }
+  }, [restaurant, user.token]);
+
+  const handleOrderStatusUpdate = async (orderId, status) => {
+    try {
+      await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, { status }, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      setOrders(orders.map(order => order._id === orderId ? { ...order, status } : order));
+    } catch (error) {
+      setError(error.response ? error.response.data.message : error.message);
+    }
+  };
 
   const handleChange = (e) => {
     setNewRestaurant({ ...newRestaurant, [e.target.name]: e.target.value });
@@ -90,6 +119,24 @@ const ManagerDashboard = () => {
           <button onClick={() => navigate(`/edit-restaurant/${restaurant._id}`)}>Edit Restaurant</button>
           <button onClick={() => navigate(`/manager-menus/${restaurant._id}`)}>Manage Menus</button>
           <button onClick={handleDelete}>Delete Restaurant</button>
+          <h3>Orders</h3>
+          {orders.length === 0 ? (
+            <p>No orders found.</p>
+          ) : (
+            <ul>
+              {orders.map(order => (
+                <li key={order._id}>
+                  <h4>Order #{order._id}</h4>
+                  <p>Status: {order.status}</p>
+                  <p>Total: ${order.total}</p>
+                  <p>Ordered at: {formatDate(order.createdAt)}</p>
+                  <button onClick={() => handleOrderStatusUpdate(order._id, 'accepted')}>Accept</button>
+                  <button onClick={() => handleOrderStatusUpdate(order._id, 'preparing')}>Prepare</button>
+                  <button onClick={() => handleOrderStatusUpdate(order._id, 'completed')}>Complete</button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       ) : (
         <div>
@@ -110,6 +157,7 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
 
 
 

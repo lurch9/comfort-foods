@@ -1,16 +1,13 @@
-// models/Menu.js
 const mongoose = require('mongoose');
-
-const menuItemSchema = mongoose.Schema({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  price: { type: Number, required: true },
-});
 
 const menuSchema = mongoose.Schema({
   name: { type: String, required: true },
-  restaurant: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required: true },
-  items: [menuItemSchema],
+  items: [{ 
+    name: { type: String, required: true },
+    description: { type: String, required: true },
+    price: { type: Number, required: true },
+  }],
+  restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant', required: true }, // Ensure restaurantId is used
 }, {
   timestamps: true,
 });
@@ -18,4 +15,5 @@ const menuSchema = mongoose.Schema({
 const Menu = mongoose.model('Menu', menuSchema);
 
 module.exports = Menu;
+
 

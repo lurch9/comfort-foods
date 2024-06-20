@@ -1,54 +1,64 @@
-.checkout-page {
+/* src/Styles/Checkout.css */
+.checkout-container {
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
-  font-family: sans-serif;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
 }
 
-.checkout-page h2 {
-  font-size: 24px;
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  width:100%;
+}
+
+.checkout-form h3 {
   margin-bottom: 20px;
 }
 
-.checkout-table {
-  width: 100%;
-  border-collapse: collapse;
+.checkout-form ul {
+  list-style-type: none;
+  padding: 0;
 }
 
-.checkout-table th, .checkout-table td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
-}
-
-.checkout-table th {
-  background-color: #f8f8f8;
-}
-
-.checkout-total {
-  margin-top: 20px;
-  font-size: 20px;
-}
-
-.checkout-form label {
-  display: block;
-  margin-top: 10px;
-}
-
-.checkout-form input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
+.checkout-form li {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
 
-button {
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
+.checkout-form .error-message {
+  color: red;
   margin-top: 20px;
 }
 
-button:hover {
-  background-color: #218838;
+.card-element {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  background: white;
+  width:100%;
 }
+
+button {
+  padding: 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+
+
+
+

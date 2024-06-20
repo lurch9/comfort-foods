@@ -3,9 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const AddMenu = () => {
+const AddMenu = ({ onMenuCreated }) => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', restaurantId: user.restaurantId });
   const [error, setError] = useState('');
 
@@ -19,7 +18,9 @@ const AddMenu = () => {
       const response = await axios.post('http://localhost:5000/api/menus', formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      navigate('/manager-menus');
+      setFormData({ name: '', restaurantId: user.restaurantId }); // Reset form data
+      setError('');
+      if (onMenuCreated) onMenuCreated(); // Notify parent component
     } catch (error) {
       setError(error.response ? error.response.data.message : error.message);
     }
@@ -41,4 +42,5 @@ const AddMenu = () => {
 };
 
 export default AddMenu;
+
 

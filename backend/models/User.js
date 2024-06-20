@@ -11,7 +11,8 @@ const userSchema = mongoose.Schema(
     state: { type: String, required: true },
     zip: { type: String, required: true },
     dateOfBirth: { type: Date, required: true },
-    role: { type: String, required: true, enum: ['user', 'manager'], default: 'user' }, // Define the role field
+    role: { type: String, required: true, enum: ['user', 'manager'], default: 'user' },
+    restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' }, // Add this line
   },
   {
     timestamps: true,
@@ -34,5 +35,6 @@ userSchema.pre('save', async function (next) {
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+
 
 

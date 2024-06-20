@@ -50,6 +50,7 @@ const loginUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role, // Ensure role is included
+      restaurantId: user.restaurantId, // Ensure restaurantId is included
       token: generateToken(user._id),
     });
   } else {
@@ -71,7 +72,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
       state: user.state,
       zip: user.zip,
       dateOfBirth: user.dateOfBirth,
-      role:user.role,
+      role: user.role,
+      restaurantId: user.restaurantId,
     });
   } else {
     res.status(404);

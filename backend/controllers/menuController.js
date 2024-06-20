@@ -2,13 +2,17 @@
 const asyncHandler = require('express-async-handler');
 const Menu = require('../models/Menu');
 
-// Create a new menu
 const createMenu = asyncHandler(async (req, res) => {
   const { name, restaurantId } = req.body;
 
+  if (!restaurantId) {
+    res.status(400);
+    throw new Error('Restaurant ID is required');
+  }
+
   const menu = new Menu({
     name,
-    restaurant: restaurantId,
+    restaurantId,
     items: [],
   });
 
@@ -16,10 +20,23 @@ const createMenu = asyncHandler(async (req, res) => {
   res.status(201).json(createdMenu);
 });
 
-// Get all menus for a specific restaurant
 const getMenusByRestaurant = asyncHandler(async (req, res) => {
-  const menus = await Menu.find({ restaurant: req.params.restaurantId });
-  res.json(menus);
+  const restaurantId = req.params.restaurantId;
+  console.log(`Fetching menus for restaurant ID: ${restaurantId}`);
+
+  try {
+    const menus = await Menu.find({ restaurantId: restaurantId });
+    if (menus.length === 0) {
+      console.log(`No menus found for restaurant ID: ${restaurantId}`);
+      res.status(404).json({ message: 'Menus not found' });
+    } else {
+      console.log(`Found menus: ${JSON.stringify(menus)}`);
+      res.json(menus);
+    }
+  } catch (error) {
+    console.error('Error fetching menus:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 // Get menu by ID
