@@ -1,52 +1,52 @@
-// src/pages/Return.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import axios from 'axios';
 
 const Return = () => {
-  const [status, setStatus] = useState(null);
-  const [customerEmail, setCustomerEmail] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { clearCart } = useCart();
 
   useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const sessionId = urlParams.get('session_id');
+    const fetchOrder = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const sessionId = urlParams.get('session_id');
+      
+      if (!sessionId) {
+        setError('No session ID found');
+        setLoading(false);
+        return;
+      }
 
-    if (sessionId) {
-      fetch(`/session-status?session_id=${sessionId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setStatus(data.status);
-          setCustomerEmail(data.customer_email);
-        });
-    }
-  }, []);
+      try {
+        const { data } = await axios.get(`http://localhost:5000/api/order/confirmation/${sessionId}`);
+        clearCart();
+        navigate(`/order-confirmation/${data._id}`);
+      } catch (err) {
+        console.error('Error fetching order:', err);
+        setError('Failed to fetch order details');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    if (status === 'complete') {
-      // Redirect to a success page or display a success message
-      navigate('/order-success');
-    }
-  }, [status, navigate]);
+    fetchOrder();
+  }, [navigate, clearCart]);
 
-  return (
-    <div>
-      {status === 'complete' ? (
-        <div>
-          <h2>Payment Successful</h2>
-          <p>
-            We appreciate your business! A confirmation email will be sent to {customerEmail}.
-          </p>
-        </div>
-      ) : (
-        <div>
-          <h2>Processing...</h2>
-          <p>Please wait while we confirm your payment.</p>
-        </div>
-      )}
-    </div>
-  );
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  return null;
 };
 
 export default Return;
+
+
 

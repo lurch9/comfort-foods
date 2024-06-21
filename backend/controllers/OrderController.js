@@ -1,68 +1,93 @@
-// controllers/orderController.js
 const asyncHandler = require('express-async-handler');
 const Order = require('../models/Order');
+const mongoose = require('mongoose');
 
-const addOrderItems = asyncHandler(async (req, res) => {
-  const { orderItems, shippingAddress, paymentMethod, itemsPrice, taxPrice, shippingPrice, totalPrice } = req.body;
-
-  if (orderItems && orderItems.length === 0) {
-    res.status(400);
-    throw new Error('No order items');
-    return;
-  } else {
-    const order = new Order({
-      user: req.user._id,
-      orderItems,
-      shippingAddress,
-      paymentMethod,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-    });
-
-    const createdOrder = await order.save();
-
-    res.status(201).json(createdOrder);
-  }
-});
-
+// Get order by order ID
 const getOrderById = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id).populate('user', 'name email');
 
   if (order) {
     res.json(order);
   } else {
-    res.status(404);
-    throw new Error('Order not found');
+    res.status(404).json({ message: 'Order not found' });
   }
 });
 
-const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+// Get order by session ID
+const getOrderBySessionId = asyncHandler(async (req, res) => {
+  const { sessionId } = req.params;
+  console.log('Looking for order with session ID:', sessionId);
 
+  const order = await Order.findOne({ sessionId });  // Use sessionId here
+  
   if (order) {
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    order.paymentResult = {
-      id: req.body.id,
-      status: req.body.status,
-      update_time: req.body.update_time,
-      email_address: req.body.email_address,
-    };
-
-    const updatedOrder = await order.save();
-
-    res.json(updatedOrder);
+    res.json(order);
   } else {
-    res.status(404);
-    throw new Error('Order not found');
+    res.status(404).json({ message: 'Order not found' });
   }
 });
 
-const getMyOrders = asyncHandler(async (req, res) => {
+// Get all orders for a user
+const getUserOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({ user: req.user._id });
   res.json(orders);
 });
 
-module.exports = { addOrderItems, getOrderById, updateOrderToPaid, getMyOrders };
+// Update the status of an order
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+      order.status = status;
+      const updatedOrder = await order.save({ validateModifiedOnly: true });
+
+      // Emit an event to notify clients about the status update
+      req.io.emit('orderStatusUpdated', {
+        orderId: order._id,
+        status: order.status,
+      });
+
+      res.json(updatedOrder);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Get all orders for a manager's restaurant
+const getRestaurantOrders = asyncHandler(async (req, res) => {
+  const restaurantId = req.user.restaurantId;
+
+  if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
+    res.status(400).json({ message: 'Invalid restaurant ID' });
+    return;
+  }
+
+  const orders = await Order.find({ restaurant: restaurantId });
+
+  if (orders.length > 0) {
+    res.json(orders);
+  } else {
+    res.status(404).json({ message: 'No orders found for this restaurant' });
+  }
+});
+
+module.exports = {
+  getOrderById,
+  getOrderBySessionId,
+  getUserOrders,
+  updateOrderStatus,
+  getRestaurantOrders,
+};
+
+
+
+
+
+

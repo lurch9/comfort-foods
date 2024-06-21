@@ -1,38 +1,44 @@
 const mongoose = require('mongoose');
 
-const orderItemSchema = mongoose.Schema({
-  name: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  price: { type: Number, required: true },
-  product: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Product',
-    required: true,
+const orderSchema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: false,
+      ref: 'User',
+    },
+    restaurant: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Restaurant',
+    },
+    items: [
+      {
+        product: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+          ref: 'Product',
+        },
+        name: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true },
+      },
+    ],
+    total: { type: Number, required: true },
+    paymentIntentId: { type: String, required: true },
+    sessionId: { type: String, required: true }, // Add this line
+    status: { type: String, required: true, default: 'pending' },
   },
-}, { _id: false });
-
-const orderSchema = mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-  },
-  restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
-    required: true,
-  },
-  items: [orderItemSchema],
-  total: { type: Number, required: true },
-  paymentIntentId: { type: String, required: true },
-  status: { type: String, required: true, default: 'pending' },
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Order = mongoose.model('Order', orderSchema);
 
 module.exports = Order;
+
+
 
 
 

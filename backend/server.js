@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const restaurantRoutes = require('./routes/restaurantRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const menuRoutes = require('./routes/menuRoutes');
+const stripeWebhook = require('./routes/stripeWebhook');
 const cors = require('cors');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const http = require('http');
@@ -32,20 +33,37 @@ app.use((req, res, next) => {
 
 // Enable CORS for all routes
 app.use(cors());
-app.use(express.json());
+console.log('CORS enabled');
+
+// Enable JSON body parser with raw body extraction for Stripe webhook
+app.use(express.json({
+  verify: (req, res, buf) => {
+    if (req.originalUrl.startsWith('/api/webhook')) {
+      req.rawBody = buf.toString();
+    }
+  }
+}));
+console.log('JSON middleware with raw body parser enabled');
 
 app.use('/api/users', userRoutes);
+console.log('User routes registered');
 app.use('/api/restaurants', restaurantRoutes);
-app.use('/api/order', orderRoutes);
+console.log('Restaurant routes registered');
+app.use('/api/orders', orderRoutes);
+console.log('Order routes registered');
 app.use('/api/menus', menuRoutes);
+console.log('Menu routes registered');
+app.use('/api/webhook', stripeWebhook);
+console.log('Stripe webhook route registered');
 
 // Place the error handler after all other middleware and routes
 app.use(errorHandler);
+console.log('Error handler middleware registered');
 
 app.post('/create-checkout-session', async (req, res) => {
   try {
     console.log("Create checkout session endpoint hit");
-    const { items } = req.body;
+    const { items, customerId, restaurantId } = req.body;
     const lineItems = items.map(item => ({
       price_data: {
         currency: 'usd',
@@ -61,7 +79,12 @@ app.post('/create-checkout-session', async (req, res) => {
       line_items: lineItems,
       mode: 'payment',
       return_url: `${process.env.CLIENT_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
-      automatic_tax: {enabled: true},
+      automatic_tax: { enabled: true },
+      metadata: {
+        customerId: customerId || '',
+        restaurantId: restaurantId,
+        items: JSON.stringify(items)
+      }
     });
     res.send({ clientSecret: session.client_secret });
   } catch (error) {
@@ -90,6 +113,12 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
+
+
+
+
+
+
 
 
 

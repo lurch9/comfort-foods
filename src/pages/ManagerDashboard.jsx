@@ -45,7 +45,7 @@ const ManagerDashboard = () => {
     if (restaurant) {
       const fetchOrders = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/orders/restaurant/${restaurant._id}`, {
+          const response = await axios.get(`http://localhost:5000/api/orders/restaurant`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
           setOrders(response.data);
@@ -157,6 +157,7 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
 
 
 

@@ -10,15 +10,33 @@ export const CartProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
+  const [restaurantId, setRestaurantId] = useState(() => {
+    const savedRestaurantId = localStorage.getItem('restaurantId');
+    return savedRestaurantId ? savedRestaurantId : null;
+  });
+
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    if (cart.length === 0) {
+      localStorage.removeItem('restaurantId');
+      setRestaurantId(null);
+    } else {
+      localStorage.setItem('restaurantId', restaurantId);
+    }
+  }, [cart, restaurantId]);
 
   const addToCart = (item) => {
     if (!item.product || !item.name || !item.price || !item.restaurant) {
       console.error('Invalid item added to cart:', item);
       return;
     }
+
+    if (restaurantId && restaurantId !== item.restaurant) {
+      console.error('You can only add items from one restaurant at a time.');
+      return;
+    }
+
+    setRestaurantId(item.restaurant);
 
     setCart((prevCart) => {
       const existingItem = prevCart.find((i) => i.product === item.product);
@@ -36,7 +54,11 @@ export const CartProvider = ({ children }) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((i) => i.product === item.product);
       if (existingItem.quantity === 1) {
-        return prevCart.filter((i) => i.product !== item.product);
+        const updatedCart = prevCart.filter((i) => i.product !== item.product);
+        if (updatedCart.length === 0) {
+          setRestaurantId(null);
+        }
+        return updatedCart;
       } else {
         return prevCart.map((i) =>
           i.product === item.product ? { ...i, quantity: i.quantity - 1 } : i
@@ -59,11 +81,12 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateCartQuantity, removeFromCart, clearCart }}>
+    <CartContext.Provider value={{ cart, restaurantId, addToCart, updateCartQuantity, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );
 };
+
 
 
 

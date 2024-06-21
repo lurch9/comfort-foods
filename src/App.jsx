@@ -7,6 +7,7 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
 import RestaurantList from './pages/RestaurantList';
 import RestaurantMenu from './pages/RestaurantMenu';
 import Dashboard from './pages/Dashboard';
@@ -43,7 +44,8 @@ function App() {
         <Route path="/restaurants/:restaurantId/menu" element={<RestaurantMenu />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/return" element={<Return />} /> {/* Add the Return route */}
+        <Route path="/return" element={<Return />} />
+        <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
         <Route path="/order-history" element={<PrivateRoute allowedRoles={['user']}><OrderHistory /></PrivateRoute>} />
         <Route path="/order/:id" element={<PrivateRoute allowedRoles={['user']}><OrderDetails /></PrivateRoute>} />
         <Route path="/unauthorized" element={<PublicRoute><Unauthorized /></PublicRoute>} />
