@@ -21,7 +21,7 @@ const Return = () => {
       }
 
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/order/confirmation/${sessionId}`);
+        const { data } = await axios.get(`http://localhost:5000/api/orders/confirmation/${sessionId}`);
         clearCart();
         navigate(`/order-confirmation/${data._id}`);
       } catch (err) {

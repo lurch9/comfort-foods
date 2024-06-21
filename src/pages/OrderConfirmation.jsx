@@ -1,7 +1,7 @@
-// OrderConfirmation.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 
 const OrderConfirmation = () => {
   const { id } = useParams();
@@ -12,7 +12,7 @@ const OrderConfirmation = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/order/${id}`);
+        const { data } = await axios.get(`http://localhost:5000/api/orders/${id}`);
         setOrder(data);
       } catch (err) {
         console.error('Error fetching order:', err);
@@ -23,6 +23,19 @@ const OrderConfirmation = () => {
     };
 
     fetchOrder();
+  }, [id]);
+
+  useEffect(() => {
+    const socket = io('http://localhost:5000');
+    socket.on('orderStatusUpdated', (update) => {
+      if (update.orderId === id) {
+        setOrder((prevOrder) => ({ ...prevOrder, status: update.status }));
+      }
+    });
+
+    return () => {
+      socket.disconnect();
+    };
   }, [id]);
 
   if (loading) {
