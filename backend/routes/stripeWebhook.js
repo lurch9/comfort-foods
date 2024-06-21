@@ -1,6 +1,7 @@
 const express = require('express');
 const Order = require('../models/Order'); // Ensure correct path
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const nodemailer = require('nodemailer');
 const router = express.Router();
 
 router.post('/', express.raw({ type: 'application/json' }), async (req, res) => {
@@ -55,10 +56,42 @@ router.post('/', express.raw({ type: 'application/json' }), async (req, res) => 
     try {
       await order.save();
       console.log('Order created:', order);
+
+      // Send confirmation email
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: process.env.GMAIL_USER,
+        to: session.customer_details.email, // Using session.customer_details.email
+        subject: 'Order Confirmation',
+        html: `
+          <h1>Thank you for your order!</h1>
+          <p>Your order has been received and is now being processed. Your order details are below:</p>
+          <h2>Order ID: ${order._id}</h2>
+          <h3>Items:</h3>
+          <ul>
+            ${order.items.map(item => `<li>${item.name} - $${item.price} x ${item.quantity}</li>`).join('')}
+          </ul>
+          <p>Total: $${order.total}</p>
+          <p>Status: ${order.status}</p>
+          <p>You can view your order <a href="http://localhost:5173/order-confirmation/${order._id}">here</a>.</p>
+        `,
+      };
+
+      console.log('Sending email to:', session.customer_details.email); // Debug log for email
+
+      await transporter.sendMail(mailOptions);
+      console.log('Email sent successfully');
       res.status(200).send('Received webhook');
     } catch (err) {
-      console.error('Error saving order:', err);
-      res.status(500).send('Error saving order');
+      console.error('Error sending email:', err);
+      res.status(500).send('Error saving order or sending email');
     }
   } else {
     console.log(`Unhandled event type ${event.type}`);
@@ -67,6 +100,8 @@ router.post('/', express.raw({ type: 'application/json' }), async (req, res) => 
 });
 
 module.exports = router;
+
+
 
 
 
