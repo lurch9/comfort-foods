@@ -12,7 +12,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = process.env.VITE_API_BASE_URL;
 
 dotenv.config();
 
