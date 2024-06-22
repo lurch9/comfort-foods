@@ -12,6 +12,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 dotenv.config();
 
@@ -112,7 +113,7 @@ app.get('/session-status', async (req, res) => {
 
 import io from 'socket.io-client';
 
-const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
+const socket = io(`${API_BASE_URL}`, {
   transports: ['websocket', 'polling'],
 });
 
