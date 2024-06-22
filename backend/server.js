@@ -12,7 +12,6 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const API_BASE_URL = process.env.VITE_API_BASE_URL;
 
 dotenv.config();
 
@@ -111,20 +110,19 @@ app.get('/session-status', async (req, res) => {
   });
 });
 
+const PORT = process.env.PORT || 5000;
 
-const socket = io(`${API_BASE_URL}`, {
-  transports: ['websocket', 'polling'],
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
-socket.on('connect', () => {
-  console.log('Connected to WebSocket');
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
 });
 
-socket.on('disconnect', () => {
-  console.log('Disconnected from WebSocket');
-});
-
-export default socket;
 
 
 
