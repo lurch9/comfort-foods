@@ -116,26 +116,45 @@ const ManagerDashboard = () => {
           <p>Restaurant Name: {restaurant.name}</p>
           <p>Address: {`${restaurant.address.street}, ${restaurant.address.city}, ${restaurant.address.state}, ${restaurant.address.zip}`}</p>
           <p>Contact: {restaurant.contact}</p>
-          <button onClick={() => navigate(`/edit-restaurant/${restaurant._id}`)}>Edit Restaurant</button>
-          <button onClick={() => navigate(`/manager-menus/${restaurant._id}`)}>Manage Menus</button>
-          <button onClick={handleDelete}>Delete Restaurant</button>
+          <div className="inline-buttons">
+            <button onClick={() => navigate(`/edit-restaurant/${restaurant._id}`)}>Edit Restaurant</button>
+            <button onClick={() => navigate(`/manager-menus/${restaurant._id}`)}>Manage Menus</button>
+            <button onClick={handleDelete}>Delete Restaurant</button>
+          </div>
           <h3>Orders</h3>
           {orders.length === 0 ? (
             <p>No orders found.</p>
           ) : (
-            <ul>
+            <div className="order-list">
               {orders.map(order => (
-                <li key={order._id}>
+                <div key={order._id} className="order-box">
                   <h4>Order #{order._id}</h4>
                   <p>Status: {order.status}</p>
                   <p>Total: ${order.total}</p>
                   <p>Ordered at: {formatDate(order.createdAt)}</p>
-                  <button onClick={() => handleOrderStatusUpdate(order._id, 'accepted')}>Accept</button>
-                  <button onClick={() => handleOrderStatusUpdate(order._id, 'preparing')}>Prepare</button>
-                  <button onClick={() => handleOrderStatusUpdate(order._id, 'completed')}>Complete</button>
-                </li>
+                  <div className="status-buttons">
+                    <button
+                      className={order.status === 'accepted' ? 'accepted' : ''}
+                      onClick={() => handleOrderStatusUpdate(order._id, 'accepted')}
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className={order.status === 'preparing' ? 'preparing' : ''}
+                      onClick={() => handleOrderStatusUpdate(order._id, 'preparing')}
+                    >
+                      Prepare
+                    </button>
+                    <button
+                      className={order.status === 'completed' ? 'completed' : ''}
+                      onClick={() => handleOrderStatusUpdate(order._id, 'completed')}
+                    >
+                      Complete
+                    </button>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           )}
         </div>
       ) : (
@@ -157,6 +176,9 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
+
+
 
 
 

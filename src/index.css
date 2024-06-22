@@ -41,11 +41,11 @@ input {
 
 button {
   padding: 0.5em 2em;
-  background: #61dafb;
+  background: #d8b69a;
   border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background: #21a1f1;
+  background: #632c0d;
 }

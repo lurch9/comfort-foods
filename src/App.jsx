@@ -23,6 +23,7 @@ import PublicRoute from './components/PublicRoute';
 import Unauthorized from './pages/Unauthorized';
 import Return from './pages/Return'; // Import the new Return component
 import { SocketProvider } from './context/SocketContext';
+import './App.css';
 
 function App() {
   return (

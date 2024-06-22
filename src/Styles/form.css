@@ -1,11 +1,12 @@
 /* src/pages/form.css */
 .form-container {
   max-width: 500px;
-  margin: 0 auto;
+  margin: 5% auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: #f9f9f9;
+  background-color: #632c0d;
+  color: #d8b69a;
 }
 
 .form-container h2 {
@@ -35,15 +36,15 @@
 
 .form-container form button {
   padding: 10px;
-  background-color: #007bff;
-  color: white;
+  background-color: #d8b69a;
+  color: #632c0d;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .form-container form button:hover {
-  background-color: #0056b3;
+  background-color: #55805f;
 }
 
 .error-message {

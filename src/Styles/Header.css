@@ -21,8 +21,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #eaeaea;
+  background-color: #632c0d;
+  border-bottom: 1px solid #d8b69a;
+  color:#d8b69a;
 }
 
 .nav {
@@ -49,7 +50,7 @@
 .nav-left li a,
 .nav-right li a {
   text-decoration: none;
-  color: #333;
+  color: #d8b69a;
 }
 
 .nav-right li button {
@@ -68,14 +69,13 @@
 
 .logo h1 {
   margin: 0;
-  font-size: 24px;
-  font-family: 'CustomFont', sans-serif; /* Placeholder for unique font */
+  font-size: 36px;
+  font-family: 'CustomFont', sans-serif;
 }
 
-/* Add a placeholder for the custom font */
 @font-face {
   font-family: 'CustomFont';
-  src: url('/path/to/custom-font.woff2') format('woff2'); /* Update with your custom font path */
+  src: url('../assets/Caveat-VariableFont_wght.ttf') format('woff2');
 }
 
   

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import '../Styles/form.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -43,22 +44,49 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className="form-container">
       <h2>Register</h2>
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Name" onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
-        <input type="text" name="street" placeholder="Street" onChange={handleChange} required />
-        <input type="text" name="city" placeholder="City" onChange={handleChange} required />
-        <input type="text" name="state" placeholder="State" onChange={handleChange} required />
-        <input type="text" name="zip" placeholder="ZIP Code" onChange={handleChange} required />
-        <input type="date" name="dateOfBirth" placeholder="Date of Birth" onChange={handleChange} required />
-        <select name="role" onChange={handleChange} required>
-          <option value="user">User</option>
-          <option value="manager">Manager</option>
-        </select>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input type="text" id="name" name="name" placeholder="Name" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Email" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" name="password" placeholder="Password" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="street">Street:</label>
+          <input type="text" id="street" name="street" placeholder="Street" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="city">City:</label>
+          <input type="text" id="city" name="city" placeholder="City" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="state">State:</label>
+          <input type="text" id="state" name="state" placeholder="State" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="zip">ZIP Code:</label>
+          <input type="text" id="zip" name="zip" placeholder="ZIP Code" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="dateOfBirth">Date of Birth:</label>
+          <input type="date" id="dateOfBirth" name="dateOfBirth" placeholder="Date of Birth" onChange={handleChange} required />
+        </div>
+        <div>
+          <label htmlFor="role">Role:</label>
+          <select id="role" name="role" onChange={handleChange} required>
+            <option value="user">User</option>
+            <option value="manager">Manager</option>
+          </select>
+        </div>
         <button type="submit">Register</button>
       </form>
     </div>
@@ -66,4 +94,5 @@ const Register = () => {
 };
 
 export default Register;
+
 
