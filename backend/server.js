@@ -110,18 +110,21 @@ app.get('/session-status', async (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+import io from 'socket.io-client';
 
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const socket = io(`${import.meta.env.VITE_API_BASE_URL}`, {
+  transports: ['websocket', 'polling'],
 });
 
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+socket.on('connect', () => {
+  console.log('Connected to WebSocket');
 });
+
+socket.on('disconnect', () => {
+  console.log('Disconnected from WebSocket');
+});
+
+export default socket;
 
 
 
