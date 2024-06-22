@@ -111,7 +111,6 @@ app.get('/session-status', async (req, res) => {
   });
 });
 
-import io from 'socket.io-client';
 
 const socket = io(`${API_BASE_URL}`, {
   transports: ['websocket', 'polling'],
