@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
+import Footer from './components/Footer';
 import Home from './pages/LandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -51,6 +52,7 @@ function App() {
         <Route path="/order/:id" element={<PrivateRoute allowedRoles={['user']}><OrderDetails /></PrivateRoute>} />
         <Route path="/unauthorized" element={<PublicRoute><Unauthorized /></PublicRoute>} />
       </Routes>
+      <Footer />
     </SocketProvider>
   );
 }

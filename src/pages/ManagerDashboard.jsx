@@ -133,6 +133,14 @@ const ManagerDashboard = () => {
                   <p>Status: {order.status}</p>
                   <p>Total: ${order.total}</p>
                   <p>Ordered at: {formatDate(order.createdAt)}</p>
+                  <h5>Items:</h5>
+                  <ul>
+                    {order.items.map((item, index) => (
+                      <li key={index}>
+                        {item.quantity} x {item.name} - ${item.price}
+                      </li>
+                    ))}
+                  </ul>
                   <div className="status-buttons">
                     <button
                       className={order.status === 'accepted' ? 'accepted' : ''}
@@ -177,6 +185,7 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
 
 
 
