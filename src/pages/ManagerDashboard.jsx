@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import '../Styles/Dashboard.css';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 const ManagerDashboard = () => {
   const { user, setUser } = useAuth();
@@ -23,7 +24,7 @@ const ManagerDashboard = () => {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/restaurants/me', {
+        const response = await axios.get(`${API_BASE_URL}/api/restaurants/me`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setRestaurant(response.data);
@@ -45,7 +46,7 @@ const ManagerDashboard = () => {
     if (restaurant) {
       const fetchOrders = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/api/orders/restaurant`, {
+          const response = await axios.get(`${API_BASE_URL}/api/orders/restaurant`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
           setOrders(response.data);
@@ -60,7 +61,7 @@ const ManagerDashboard = () => {
 
   const handleOrderStatusUpdate = async (orderId, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, { status }, {
+      await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, { status }, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setOrders(orders.map(order => order._id === orderId ? { ...order, status } : order));
@@ -76,7 +77,7 @@ const ManagerDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/restaurants', newRestaurant, {
+      const response = await axios.post(`${API_BASE_URL}/api/restaurants`, newRestaurant, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setRestaurant(response.data);
@@ -89,7 +90,7 @@ const ManagerDashboard = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this restaurant?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/restaurants/${restaurant._id}`, {
+        await axios.delete(`${API_BASE_URL}/api/restaurants/${restaurant._id}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setRestaurant(null);

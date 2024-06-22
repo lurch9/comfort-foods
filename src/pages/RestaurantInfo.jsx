@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import '../Styles/RestaurantInfo.css';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const RestaurantInfo = () => {
   const { id } = useParams();
@@ -10,7 +11,7 @@ const RestaurantInfo = () => {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/restaurants/${id}`);
+        const response = await axios.get(`${API_BASE_URL}/api/restaurants/${id}`);
         setRestaurant(response.data);
       } catch (error) {
         console.error('Error fetching restaurant:', error);

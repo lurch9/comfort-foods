@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import '../Styles/Dashboard.css';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -15,7 +16,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/users/profile', {
+        const response = await axios.get(`${API_BASE_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setData(response.data);

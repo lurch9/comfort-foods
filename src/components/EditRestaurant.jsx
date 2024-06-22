@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const EditRestaurant = () => {
   const { user } = useAuth();
@@ -21,7 +22,7 @@ const EditRestaurant = () => {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/restaurants/${id}`, {
+        const response = await axios.get(`${API_BASE_URL}/api/restaurants/${id}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         const { name, address, contact } = response.data;
@@ -50,7 +51,7 @@ const EditRestaurant = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/restaurants/${id}`, formData, {
+      await axios.put(`${API_BASE_URL}/api/restaurants/${id}`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate('/manager-dashboard');

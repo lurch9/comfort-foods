@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AddMenu = ({ onMenuCreated }) => {
   const { user } = useAuth();
@@ -15,7 +16,7 @@ const AddMenu = ({ onMenuCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/menus', formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/menus`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       setFormData({ name: '', restaurantId: user.restaurantId }); // Reset form data

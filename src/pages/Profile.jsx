@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import '../Styles/form.css';
 import { useAuth } from '../context/AuthContext';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Profile = () => {
   const { user, setUser } = useAuth();
@@ -76,7 +77,7 @@ const Profile = () => {
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
-        const response = await axios.put('http://localhost:5000/api/users/profile', values, {
+        const response = await axios.put(`${API_BASE_URL}/api/users/profile`, values, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setUser(response.data);

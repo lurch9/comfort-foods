@@ -5,6 +5,7 @@ import AddMenu from '../components/AddMenu';
 import { useNavigate } from 'react-router-dom';
 import '../Styles/Dashboard.css'; // Add any custom styles here
 import '../Styles/ManagerMenus.css'; // Create and use this new CSS file for styling
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ManagerMenus = () => {
   const { user } = useAuth();
@@ -22,7 +23,7 @@ const ManagerMenus = () => {
       }
       try {
         console.log(`Fetching menus for restaurant ID: ${user.restaurantId}`);
-        const response = await axios.get(`http://localhost:5000/api/menus/restaurant/${user.restaurantId}`, {
+        const response = await axios.get(`${API_BASE_URL}/api/menus/restaurant/${user.restaurantId}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setMenus(response.data);
@@ -40,7 +41,7 @@ const ManagerMenus = () => {
   const handleDelete = async (menuId) => {
     if (window.confirm('Are you sure you want to delete this menu?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/menus/${menuId}`, {
+        await axios.delete(`${API_BASE_URL}/api/menus/${menuId}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setMenus(menus.filter(menu => menu._id !== menuId));

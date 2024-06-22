@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const AddProductForm = ({ restaurantId }) => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const AddProductForm = ({ restaurantId }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`http://localhost:5000/api/menus/${restaurantId}`, formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/menus/${restaurantId}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -5,6 +5,7 @@ import axios from 'axios';
 import '../Styles/form.css';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Login = () => {
   const { setUser } = useAuth();
@@ -21,7 +22,7 @@ const Login = () => {
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
-        const response = await axios.post('http://localhost:5000/api/users/login', values);
+        const response = await axios.post(`${API_BASE_URL}/api/users/login`, values);
         if (response.data) {
           setUser(response.data);
           if (response.data.role === 'manager') {

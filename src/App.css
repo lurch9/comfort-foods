@@ -2,7 +2,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-image: url('./assets/jed-owen-NPBnWE1o07I-unsplash.jpg');
+  background-image: url('/jed-owen-NPBnWE1o07I-unsplash.jpg');
   background-size: cover; /* Makes sure the image covers the whole page */
   background-repeat: no-repeat; /* Prevents the image from repeating */
   background-position: center; /* Centers the image */

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Return = () => {
   const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ const Return = () => {
       }
 
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/orders/confirmation/${sessionId}`);
+        const { data } = await axios.get(`${API_BASE_URL}/api/orders/confirmation/${sessionId}`);
         clearCart();
         navigate(`/order-confirmation/${data._id}`);
       } catch (err) {

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../context/CartContext';
 import '../Styles/RestaurantMenu.css'; // Import the CSS file for styling
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const RestaurantMenu = () => {
   const { restaurantId } = useParams();
@@ -14,7 +15,7 @@ const RestaurantMenu = () => {
   useEffect(() => {
     const fetchMenus = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/menus/restaurant/${restaurantId}`);
+        const response = await axios.get(`${API_BASE_URL}/api/menus/restaurant/${restaurantId}`);
         setMenus(response.data);
       } catch (err) {
         setError(err.response ? err.response.data.message : err.message);

@@ -72,7 +72,7 @@ const updateMenu = asyncHandler(async (req, res) => {
 const deleteMenu = asyncHandler(async (req, res) => {
   const menu = await Menu.findById(req.params.id);
   if (menu) {
-    await menu.remove();
+    await Menu.deleteOne({ _id: req.params.id }); // Updated to use deleteOne
     res.json({ message: 'Menu removed' });
   } else {
     res.status(404);

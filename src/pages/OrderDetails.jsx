@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -11,7 +12,7 @@ const OrderDetails = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/order/${id}`);
+        const { data } = await axios.get(`${API_BASE_URL}/api/order/${id}`);
         setOrder(data);
       } catch (err) {
         console.error('Error fetching order details:', err);

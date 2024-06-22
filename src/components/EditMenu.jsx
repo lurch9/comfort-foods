@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const EditMenu = () => {
   const { user } = useAuth();
@@ -14,7 +15,7 @@ const EditMenu = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/menus/${id}`, {
+        const response = await axios.get(`${API_BASE_URL}/api/menus/${id}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         setMenu(response.data);
@@ -50,7 +51,7 @@ const EditMenu = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/menus/${id}`, menu, {
+      await axios.put(`${API_BASE_URL}/api/menus/${id}`, menu, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
       navigate('/manager-menus');

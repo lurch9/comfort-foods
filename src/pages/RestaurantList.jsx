@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../Styles/RestaurantList.css';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const RestaurantList = () => {
   const [zip, setZip] = useState('');
@@ -15,7 +16,7 @@ const RestaurantList = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.get(`http://localhost:5000/api/restaurants/zip?zip=${zip}`);
+      const response = await axios.get(`${API_BASE_URL}/api/restaurants/zip?zip=${zip}`);
       setRestaurants(response.data);
     } catch (err) {
       setError(err.response ? err.response.data.message : err.message);

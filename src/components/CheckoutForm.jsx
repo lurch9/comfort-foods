@@ -5,7 +5,8 @@ import {
   EmbeddedCheckout
 } from '@stripe/react-stripe-js';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext'; // Assume you have an AuthContext to get the user info
+import { useAuth } from '../context/AuthContext';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
@@ -14,7 +15,7 @@ const CheckoutForm = () => {
   const { user } = useAuth(); // Get user info from AuthContext
 
   const fetchClientSecret = useCallback(async () => {
-    const response = await fetch('http://localhost:5000/create-checkout-session', {
+    const response = await fetch(`${API_BASE_URL}/create-checkout-session`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
