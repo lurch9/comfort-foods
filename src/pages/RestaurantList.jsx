@@ -48,7 +48,9 @@ const RestaurantList = () => {
       {!loading && !error && (
         <div className="restaurant-list">
           {restaurants.length === 0 ? (
-            <p>No restaurants found for the provided zip code.</p>
+             <div className="restaurant-box">
+             <p>No restaurants found for the provided zip code.</p>
+           </div>
           ) : (
             restaurants.map((restaurant) => (
               <div key={restaurant._id} className="restaurant-box">
