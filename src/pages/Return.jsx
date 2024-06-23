@@ -14,6 +14,7 @@ const Return = () => {
     const fetchOrder = async () => {
       const urlParams = new URLSearchParams(window.location.search);
       const sessionId = urlParams.get('session_id');
+      console.log('Session ID:', sessionId);
       
       if (!sessionId) {
         setError('No session ID found');
@@ -48,6 +49,7 @@ const Return = () => {
 };
 
 export default Return;
+
 
 
 

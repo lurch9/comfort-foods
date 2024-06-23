@@ -14,7 +14,7 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   }
 
   // Redirect to login if not authenticated
-  return <Navigate to="/login" />;
+  return <Navigate to="/unauthorized" />;
 };
 
 export default PrivateRoute;
