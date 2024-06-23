@@ -6,7 +6,8 @@ const {
   getOrderById, 
   updateOrderStatus, 
   getUserOrders, 
-  getRestaurantOrders 
+  getRestaurantOrders,
+  getCompletedOrders
 } = require('../controllers/orderController');
 
 // Get all orders for a user
@@ -23,6 +24,8 @@ router.get('/:id', getOrderById);
 
 // Update the status of an order
 router.put('/:id/status', protect, updateOrderStatus);
+
+router.route('/completed/:restaurantId').get(managerProtect, getCompletedOrders);
 
 module.exports = router;
 

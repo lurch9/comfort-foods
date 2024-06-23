@@ -78,12 +78,34 @@ const getRestaurantOrders = asyncHandler(async (req, res) => {
   }
 });
 
+const getCompletedOrders = asyncHandler(async (req, res) => {
+  const { restaurantId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(restaurantId)) {
+    return res.status(400).json({ message: 'Invalid restaurant ID' });
+  }
+
+  try {
+    const completedOrders = await Order.find({ restaurant: restaurantId, status: 'completed' });
+
+    if (completedOrders.length > 0) {
+      res.json(completedOrders);
+    } else {
+      res.status(404).json({ message: 'No completed orders found for this restaurant' });
+    }
+  } catch (error) {
+    console.error('Error fetching completed orders:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
 module.exports = {
   getOrderById,
   getOrderBySessionId,
   getUserOrders,
   updateOrderStatus,
   getRestaurantOrders,
+  getCompletedOrders,
 };
 
 

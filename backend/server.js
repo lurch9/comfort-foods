@@ -37,6 +37,12 @@ app.use(express.json({
   }
 }));
 
+// Attach io to req object
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
 app.use('/api/users', userRoutes);
 app.use('/api/restaurants', restaurantRoutes);
 app.use('/api/orders', orderRoutes);
@@ -99,6 +105,7 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
+
 
 
 

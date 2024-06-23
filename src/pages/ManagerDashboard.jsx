@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import CompletedOrders from './CompletedOrders'; // Import the new component
 import '../Styles/Dashboard.css';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -20,22 +21,19 @@ const ManagerDashboard = () => {
     zip: '',
     contact: '',
   });
+  const [showCompletedOrders, setShowCompletedOrders] = useState(false); // State to toggle completed orders view
 
   useEffect(() => {
     const fetchRestaurant = async () => {
-      console.log('Fetching restaurant details...');
       try {
         const response = await axios.get(`${API_BASE_URL}/api/restaurants/me`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
-        console.log('Restaurant details fetched:', response.data);
         setRestaurant(response.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          console.log('No restaurant found for the manager.');
           setRestaurant(null);
         } else {
-          console.error('Error fetching restaurant details:', error);
           setError(error.response ? error.response.data.message : error.message);
         }
       } finally {
@@ -49,19 +47,15 @@ const ManagerDashboard = () => {
   useEffect(() => {
     if (restaurant) {
       const fetchOrders = async () => {
-        console.log('Fetching orders with token:', user.token);
         try {
           const response = await axios.get(`${API_BASE_URL}/api/orders/restaurant`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
-          console.log('Orders fetched:', response.data);
           setOrders(response.data);
         } catch (error) {
           if (error.response && error.response.status === 404) {
-            console.log('No orders found for the restaurant.');
             setOrders([]);
           } else {
-            console.error('Error fetching restaurant details:', error);
             setError(error.response ? error.response.data.message : error.message);
           }
         } finally {
@@ -78,9 +72,19 @@ const ManagerDashboard = () => {
       await axios.put(`${API_BASE_URL}/api/orders/${orderId}/status`, { status }, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      setOrders(orders.map(order => order._id === orderId ? { ...order, status } : order));
+
+      if (status === 'completed') {
+        // Remove the order from the list if it is completed
+        setOrders((prevOrders) => prevOrders.filter((order) => order._id !== orderId));
+      } else {
+        // Otherwise, update the status in the orders list
+        setOrders((prevOrders) =>
+          prevOrders.map((order) =>
+            order._id === orderId ? { ...order, status } : order
+          )
+        );
+      }
     } catch (error) {
-      console.error('Error updating order status:', error);
       setError(error.response ? error.response.data.message : error.message);
     }
   };
@@ -95,11 +99,9 @@ const ManagerDashboard = () => {
       const response = await axios.post(`${API_BASE_URL}/api/restaurants`, newRestaurant, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
-      console.log('New restaurant created:', response.data);
       setRestaurant(response.data);
       setUser((prevUser) => ({ ...prevUser, restaurantId: response.data._id }));
     } catch (error) {
-      console.error('Error creating new restaurant:', error);
       setError(error.response ? error.response.data.message : error.message);
     }
   };
@@ -110,11 +112,9 @@ const ManagerDashboard = () => {
         await axios.delete(`${API_BASE_URL}/api/restaurants/${restaurant._id}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
-        console.log('Restaurant deleted.');
         setRestaurant(null);
         setUser((prevUser) => ({ ...prevUser, restaurantId: null }));
       } catch (error) {
-        console.error('Error deleting restaurant:', error);
         setError(error.response ? error.response.data.message : error.message);
       }
     }
@@ -140,13 +140,16 @@ const ManagerDashboard = () => {
             <button onClick={() => navigate(`/edit-restaurant/${restaurant._id}`)}>Edit Restaurant</button>
             <button onClick={() => navigate(`/manager-menus/${restaurant._id}`)}>Manage Menus</button>
             <button onClick={handleDelete}>Delete Restaurant</button>
+            <button onClick={() => setShowCompletedOrders(!showCompletedOrders)}>
+              {showCompletedOrders ? 'Hide Completed Orders' : 'Show Completed Orders'}
+            </button>
           </div>
           <h3>Orders</h3>
           {orders.length === 0 ? (
             <p>No orders found for this restaurant.</p>
           ) : (
             <div className="order-list">
-              {orders.map(order => (
+              {orders.map((order) => (
                 <div key={order._id} className="order-box">
                   <h4>Order #{order._id}</h4>
                   <p>Status: {order.status}</p>
@@ -184,6 +187,7 @@ const ManagerDashboard = () => {
               ))}
             </div>
           )}
+          {showCompletedOrders && <CompletedOrders restaurantId={restaurant._id} />} {/* Show the completed orders component */}
         </div>
       ) : (
         <div>
@@ -204,6 +208,8 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
+
 
 
 
