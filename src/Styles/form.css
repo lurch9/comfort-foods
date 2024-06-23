@@ -3,6 +3,7 @@
   max-width: 500px;
   margin: 5% auto;
   padding: 20px;
+  padding-bottom: 60px; 
   border: 1px solid #ccc;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.9); /* Slight transparency */
@@ -84,11 +85,12 @@
   .form-container {
     width: 90%;
     padding: 15px;
+    padding-bottom: 60px; 
   }
 
   .form-container h2 {
     font-size: 1.5rem;
-    margin-bottom: 10px; /* Reduced margin-bottom */
+    margin-bottom: 10px; 
   }
 
   .form-container form input[type="email"],
@@ -96,11 +98,11 @@
   .form-container form input[type="text"],
   .form-container form button {
     font-size: 1rem;
-    padding: 8px; /* Reduced padding */
+    padding: 8px; 
   }
 
   .form-container form div {
-    margin-bottom: 10px; /* Reduced margin-bottom */
+    margin-bottom: 10px; 
   }
 
   .error-message,

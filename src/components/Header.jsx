@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ const Header = () => {
   const { user, logout } = useAuth();
   const { cart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const getTotalItems = () => {
     return cart.reduce((total, item) => total + item.quantity, 0);
@@ -19,6 +20,19 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setIsMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <header className="header">
       <div className="logo">
@@ -27,34 +41,36 @@ const Header = () => {
       <div className="menu-icon" onClick={toggleMenu}>
         <FontAwesomeIcon icon={faBars} />
       </div>
-      <nav className={`nav ${isMenuOpen ? 'open' : ''}`}>
+      <nav ref={menuRef} className={`nav ${isMenuOpen ? 'open' : ''}`}>
         <ul className="nav-links">
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link>
           </li>
           {user && user.role !== 'guest' && (
             <>
               <li>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
               </li>
               {user.role === 'manager' && (
-                <li><Link to="/manager-dashboard">Manager Dashboard</Link></li>
+                <li>
+                  <Link to="/manager-dashboard" onClick={() => setIsMenuOpen(false)}>Manager Dashboard</Link>
+                </li>
               )}
               <li>
-                <Link to="/order-history">Orders</Link>
+                <Link to="/order-history" onClick={() => setIsMenuOpen(false)}>Orders</Link>
               </li>
               <li>
-                <Link to="/" onClick={logout}>Logout</Link>
+                <Link to="/" onClick={() => { setIsMenuOpen(false); logout(); }}>Logout</Link>
               </li>
             </>
           )}
           {!user || user.role === 'guest' ? (
             <>
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/login" onClick={() => setIsMenuOpen(false)}>Login</Link>
               </li>
               <li>
-                <Link to="/register">Register</Link>
+                <Link to="/register" onClick={() => setIsMenuOpen(false)}>Register</Link>
               </li>
             </>
           ) : null}
@@ -73,6 +89,7 @@ const Header = () => {
 };
 
 export default Header;
+
 
 
 
