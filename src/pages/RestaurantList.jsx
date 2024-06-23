@@ -29,13 +29,18 @@ const RestaurantList = () => {
           const { latitude, longitude } = position.coords;
           setLocation({ lat: latitude, lng: longitude });
           reverseGeocode(latitude, longitude);
+          handleSearch(latitude, longitude); // Perform search immediately
         },
         (error) => {
           console.error('Error getting user location:', error);
+          setLoading(false); // Stop loading if geolocation is not available
         }
       );
+    } else {
+      setLoading(false); // Stop loading if geolocation is not available
     }
   }, []);
+  
 
   const reverseGeocode = async (lat, lng) => {
     try {
@@ -67,17 +72,21 @@ const RestaurantList = () => {
     }
   };
 
-  const handleSearch = async () => {
-    if (!location) {
+  const handleSearch = async (latitude, longitude) => {
+    const lat = latitude || (location ? location.lat : null);
+    const lng = longitude || (location ? location.lng : null);
+  
+    if (!lat || !lng) {
       setError('Please select a valid address.');
       return;
     }
-
+  
     setLoading(true);
     setError('');
+    setSearched(true); // Indicate that a search has been performed
     try {
       const response = await axios.get(`${API_BASE_URL}/api/restaurants/near`, {
-        params: { lat: location.lat, lon: location.lng, maxDistance: proximity * 1609.34 } // Convert miles to meters
+        params: { lat: lat, lon: lng, maxDistance: proximity * 1609.34 } // Convert miles to meters
       });
       setRestaurants(response.data);
     } catch (err) {
@@ -87,6 +96,7 @@ const RestaurantList = () => {
       setLoading(false);
     }
   };
+  
 
   if (!isLoaded) return <div>Loading...</div>;
 
@@ -130,7 +140,7 @@ const RestaurantList = () => {
         <div className="restaurant-list">
           {restaurants.length === 0 ? (
             <div className="restaurant-box">
-              <p>No restaurants found for the provided location.</p>
+              <p>Enter your address and hit search to find registered restaurants near you!</p>
             </div>
           ) : (
             restaurants.map((restaurant) => (
