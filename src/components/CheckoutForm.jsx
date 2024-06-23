@@ -33,6 +33,7 @@ const CheckoutForm = () => {
   const options = { fetchClientSecret };
 
   const handleCheckoutComplete = () => {
+    console.log('Checkout completed!');
     clearCart(); // Clear the cart upon successful checkout
   };
 

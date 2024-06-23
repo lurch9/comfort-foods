@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 const CartContext = createContext();
 
@@ -6,22 +7,21 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
+    const savedCart = Cookies.get('cart');
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
   const [restaurantId, setRestaurantId] = useState(() => {
-    const savedRestaurantId = localStorage.getItem('restaurantId');
-    return savedRestaurantId ? savedRestaurantId : null;
+    return Cookies.get('restaurantId') || null;
   });
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    Cookies.set('cart', JSON.stringify(cart), { expires: 7 });
     if (cart.length === 0) {
-      localStorage.removeItem('restaurantId');
+      Cookies.remove('restaurantId');
       setRestaurantId(null);
     } else {
-      localStorage.setItem('restaurantId', restaurantId);
+      Cookies.set('restaurantId', restaurantId, { expires: 7 });
     }
   }, [cart, restaurantId]);
 
@@ -77,7 +77,8 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCart([]);
-    localStorage.removeItem('cart');
+    Cookies.remove('cart');
+    Cookies.remove('restaurantId');
   };
 
   return (
@@ -86,6 +87,7 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
+
 
 
 

@@ -54,6 +54,7 @@ if (process.env.NODE_ENV === 'production') {
 app.use(errorHandler);
 
 app.post('/create-checkout-session', async (req, res) => {
+  console.log('Creating checkout session');
   try {
     const { items, customerId, restaurantId } = req.body;
     const lineItems = items.map(item => ({
@@ -68,7 +69,7 @@ app.post('/create-checkout-session', async (req, res) => {
       ui_mode: 'embedded',
       line_items: lineItems,
       mode: 'payment',
-      return_url: `${process.env.CLIENT_URL}return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${process.env.CLIENT_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
       automatic_tax: { enabled: true },
       metadata: { customerId: customerId || '', restaurantId: restaurantId, items: JSON.stringify(items) }
     });
