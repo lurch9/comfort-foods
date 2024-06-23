@@ -6,13 +6,13 @@ const userSchema = mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    street: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    zip: { type: String, required: true },
+    street: { type: String, required: false },
+    city: { type: String, required: false },
+    state: { type: String, required: false },
+    zip: { type: String, required: false },
     dateOfBirth: { type: Date, required: true },
     role: { type: String, required: true, enum: ['user', 'manager'], default: 'user' },
-    restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' }, // Add this line
+    restaurantId: { type: mongoose.Schema.Types.ObjectId, ref: 'Restaurant' }, 
   },
   {
     timestamps: true,
