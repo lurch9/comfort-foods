@@ -68,16 +68,15 @@ const Login = () => {
             <div className="error-message">{formik.errors.password}</div>
           ) : null}
         </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              name="rememberMe"
-              checked={formik.values.rememberMe}
-              onChange={formik.handleChange}
-            />
-            Remember me
-          </label>
+        <div className="checkbox-container">
+          <input
+            type="checkbox"
+            name="rememberMe"
+            id="rememberMe"
+            checked={formik.values.rememberMe}
+            onChange={formik.handleChange}
+          />
+          <label htmlFor="rememberMe">Remember me for 30 days</label>
         </div>
         <button type="submit" disabled={formik.isSubmitting}>
           Login
@@ -89,6 +88,7 @@ const Login = () => {
 };
 
 export default Login;
+
 
 
 

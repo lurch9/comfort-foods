@@ -1,19 +1,18 @@
-
-  /* src/pages/form.css */
+/* src/pages/form.css */
 .form-container {
   max-width: 500px;
   margin: 5% auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
-  background-color: #632c0d;
-  color: #d8b69a;
+  background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+  color: #632c0d;
 }
 
 .form-container h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #d8b69a;
+  color: #632c0d;
 }
 
 .form-container form {
@@ -30,16 +29,19 @@
   margin-bottom: 5px;
 }
 
-.form-container form input {
+.form-container form input[type="email"],
+.form-container form input[type="password"],
+.form-container form input[type="text"] {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  width: 100%;
 }
 
 .form-container form button {
   padding: 10px;
-  background-color: #d8b69a;
-  color: #632c0d;
+  background-color: #55805f;
+  color: #f8f9fa;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -47,6 +49,24 @@
 
 .form-container form button:hover {
   background-color: #632c0d;
+}
+
+.form-container form .checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.form-container form .checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.form-container form .checkbox-container label {
+  font-weight: normal;
+  cursor: pointer;
 }
 
 .error-message {
@@ -66,19 +86,14 @@
     padding: 15px;
   }
 
-  .form-container {
-    width: 90%;
-    margin: 10px auto; /* Reduced margin for better use of space */
-    padding: 10px; /* Reduced padding */
-    border-radius: 5px;
-  }
-
   .form-container h2 {
     font-size: 1.5rem;
     margin-bottom: 10px; /* Reduced margin-bottom */
   }
 
-  .form-container form input, 
+  .form-container form input[type="email"],
+  .form-container form input[type="password"],
+  .form-container form input[type="text"],
   .form-container form button {
     font-size: 1rem;
     padding: 8px; /* Reduced padding */

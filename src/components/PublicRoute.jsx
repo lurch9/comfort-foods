@@ -6,7 +6,7 @@ const PublicRoute = ({ children }) => {
   const { user } = useAuth();
 
   // Check if the user is logged in and is not a guest
-  return user && user.role !== 'guest' ? <Navigate to="/restaurants" /> : children;
+  return user && user.role !== 'guest' ? <Navigate to="/" /> : children;
 };
 
 export default PublicRoute;
