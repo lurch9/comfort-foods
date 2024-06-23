@@ -19,7 +19,7 @@ const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('http://localhost:5000/api/users/profile', {
+          const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/profile`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -47,7 +47,6 @@ const AuthProvider = ({ children }) => {
     setUser({ token: null, role: 'guest', restaurantId: null });
   };
 
-  console.log('AuthContext - User:', user); // Debugging user
 
   return (
     <AuthContext.Provider value={{ user, setUser, login, logout }}>
