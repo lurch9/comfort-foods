@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import '../Styles/OrderConfirmation.css'; // Add this line to import the CSS file
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const OrderConfirmation = () => {
@@ -48,24 +49,27 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <div>
-      <h2>Order Confirmation</h2>
-      <p>Order ID: {order._id}</p>
-      <p>Total: ${order.total}</p>
-      <h3>Items:</h3>
-      <ul>
-        {order.items.map((item, index) => (
-          <li key={index}>
-            {item.name} - ${item.price} x {item.quantity}
-          </li>
-        ))}
-      </ul>
-      <p>Status: {order.status}</p>
+    <div className="order-confirmation-container">
+      <div className="order-confirmation-box">
+        <h2>Order Confirmation</h2>
+        <p>Order ID: {order._id}</p>
+        <p>Total: ${order.total}</p>
+        <h3>Items:</h3>
+        <ul>
+          {order.items.map((item, index) => (
+            <li key={index}>
+              {item.name} - ${item.price} x {item.quantity}
+            </li>
+          ))}
+        </ul>
+        <p>Status: {order.status}</p>
+      </div>
     </div>
   );
 };
 
 export default OrderConfirmation;
+
 
 
 
