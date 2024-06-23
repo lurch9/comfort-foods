@@ -87,7 +87,7 @@ app.post('/create-checkout-session', async (req, res) => {
       ui_mode: 'embedded',
       line_items: lineItems,
       mode: 'payment',
-      return_url: `${process.env.CLIENT_URL}/return?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: `${process.env.CLIENT_URL}return?session_id={CHECKOUT_SESSION_ID}`,
       automatic_tax: { enabled: true },
       metadata: {
         customerId: customerId || '',
