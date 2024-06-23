@@ -48,7 +48,7 @@ function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/return" element={<Return />} />
         <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
-        <Route path="/order-history" element={<PrivateRoute allowedRoles={['user']}><OrderHistory /></PrivateRoute>} />
+        <Route path="/order-history" element={<PrivateRoute allowedRoles={['manager', 'user']}><OrderHistory /></PrivateRoute>} />
         <Route path="/order/:id" element={<PrivateRoute allowedRoles={['user']}><OrderDetails /></PrivateRoute>} />
         <Route path="/unauthorized" element={<PublicRoute><Unauthorized /></PublicRoute>} />
       </Routes>
