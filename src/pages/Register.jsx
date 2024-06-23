@@ -16,10 +16,11 @@ const Register = () => {
     zip: '',
     dateOfBirth: '',
     role: 'user', // default to 'user'
+    rememberMe: false, // Add rememberMe field
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { login } = useAuth(); // Use login method to set user and handle cookies
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,16 +29,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/users/register`, formData);
+      const response = await axios.post(`${API_BASE_URL}/api/users`, formData);
       const userData = response.data;
-      setUser(userData); // Set the user data in context
-      localStorage.setItem('token', userData.token); // Save the token to local storage
+      login(userData, formData.rememberMe); // Use the login method from the context
 
       // Redirect based on user role
       if (userData.role === 'manager') {
         navigate('/manager-dashboard');
       } else {
-        navigate('/restaurants');
+        navigate('/');
       }
     } catch (error) {
       setError(error.response ? error.response.data.message : error.message);
@@ -88,6 +88,16 @@ const Register = () => {
             <option value="manager">Manager</option>
           </select>
         </div>
+        <div className="checkbox-container">
+          <input
+            type="checkbox"
+            name="rememberMe"
+            id="rememberMe"
+            checked={formData.rememberMe}
+            onChange={handleChange}
+          />
+          <label htmlFor="rememberMe">Remember me for 30 days</label>
+        </div>
         <button type="submit">Register</button>
       </form>
     </div>
@@ -95,5 +105,6 @@ const Register = () => {
 };
 
 export default Register;
+
 
 

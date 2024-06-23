@@ -29,7 +29,7 @@ function App() {
     <SocketProvider>
       <Header />
       <Routes>
-        <Route path="/" element={<PublicRoute><RestaurantList /></PublicRoute>} />
+        <Route path="/" element={<RestaurantList />} />
         <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
         <Route path="/profile" element={<PrivateRoute allowedRoles={['manager', 'user']}><Profile /></PrivateRoute>} />

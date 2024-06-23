@@ -51,7 +51,7 @@ const OrderHistory = () => {
                   </li>
                 ))}
               </ul>
-              <Link to={`/order/${order._id}`}>
+              <Link to={`/order-confirmation/${order._id}`}>
                 <button>View Order</button>
               </Link>
             </li>
