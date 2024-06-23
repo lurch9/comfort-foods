@@ -105,6 +105,9 @@
     top: 50px; /* Adjust this if necessary to match the height of your header */
     width: 100%; /* Full width for mobile */
   }
+  .logo h1 {
+    font-size: 24px;
+  }
 }
 
 
