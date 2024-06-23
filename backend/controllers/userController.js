@@ -4,7 +4,6 @@ const generateToken = require('../utils/generateToken');
 
 // Register a new user or manager
 const registerUser = asyncHandler(async (req, res) => {
-  console.log('Received registration data:', req.body); // Log the incoming request data
   const { name, email, password, street, city, state, zip, dateOfBirth, role } = req.body;
 
   const userExists = await User.findOne({ email });
@@ -41,17 +40,26 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, rememberMe } = req.body;
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
+    const tokenExpiration = rememberMe ? '30d' : '15m';
+    const token = generateToken(user._id, tokenExpiration);
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : null, // 30 days or session
+    });
+
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role, // Ensure role is included
-      restaurantId: user.restaurantId, // Ensure restaurantId is included
-      token: generateToken(user._id),
+      role: user.role, 
+      restaurantId: user.restaurantId, 
+      token,
     });
   } else {
     res.status(401);

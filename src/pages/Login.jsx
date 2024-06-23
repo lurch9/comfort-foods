@@ -8,13 +8,14 @@ import { useAuth } from '../context/AuthContext';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const Login = () => {
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
       email: '',
-      password: ''
+      password: '',
+      rememberMe: false, // Add rememberMe to initialValues
     },
     validationSchema: Yup.object({
       email: Yup.string().email('Invalid email address').required('Required'),
@@ -22,9 +23,10 @@ const Login = () => {
     }),
     onSubmit: async (values, { setSubmitting, setErrors }) => {
       try {
-        const response = await axios.post(`${API_BASE_URL}/api/users/login`, values);
+        const { email, password, rememberMe } = values;
+        const response = await axios.post(`${API_BASE_URL}/api/users/login`, { email, password, rememberMe });
         if (response.data) {
-          setUser(response.data);
+          login(response.data, rememberMe); // Use the login method from the context
           if (response.data.role === 'manager') {
             navigate('/manager-dashboard');
           } else {
@@ -66,6 +68,17 @@ const Login = () => {
             <div className="error-message">{formik.errors.password}</div>
           ) : null}
         </div>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              name="rememberMe"
+              checked={formik.values.rememberMe}
+              onChange={formik.handleChange}
+            />
+            Remember me
+          </label>
+        </div>
         <button type="submit" disabled={formik.isSubmitting}>
           Login
         </button>
@@ -76,5 +89,6 @@ const Login = () => {
 };
 
 export default Login;
+
 
 

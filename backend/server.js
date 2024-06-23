@@ -7,10 +7,10 @@ const orderRoutes = require('./routes/orderRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 const stripeWebhook = require('./routes/stripeWebhook');
 const cors = require('cors');
+const cookieParser = require('cookie-parser'); // Add this line
 const { errorHandler } = require('./middleware/errorMiddleware');
 const http = require('http');
 const { Server } = require('socket.io');
-const path = require('path');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 dotenv.config();
@@ -26,17 +26,8 @@ const io = new Server(server, {
   },
 });
 
-// Make io accessible in request object
-app.use((req, res, next) => {
-  req.io = io;
-  next();
-});
-
-// Enable CORS for all routes
 app.use(cors());
-console.log('CORS enabled');
-
-// Enable JSON body parser with raw body extraction for Stripe webhook
+app.use(cookieParser()); // Add this line
 app.use(express.json({
   verify: (req, res, buf) => {
     if (req.originalUrl.startsWith('/api/webhook')) {
@@ -44,20 +35,14 @@ app.use(express.json({
     }
   }
 }));
-console.log('JSON middleware with raw body parser enabled');
 
 app.use('/api/users', userRoutes);
-console.log('User routes registered');
 app.use('/api/restaurants', restaurantRoutes);
-console.log('Restaurant routes registered');
 app.use('/api/orders', orderRoutes);
-console.log('Order routes registered');
 app.use('/api/menus', menuRoutes);
-console.log('Menu routes registered');
 app.use('/api/webhook', stripeWebhook);
-console.log('Stripe webhook route registered');
 
-// Serve static files from the dist directory
+// Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '..', 'dist')));
   app.get('*', (req, res) =>
@@ -65,20 +50,16 @@ if (process.env.NODE_ENV === 'production') {
   );
 }
 
-// Place the error handler after all other middleware and routes
+// Error handling middleware
 app.use(errorHandler);
-console.log('Error handler middleware registered');
 
 app.post('/create-checkout-session', async (req, res) => {
   try {
-    console.log("Create checkout session endpoint hit");
     const { items, customerId, restaurantId } = req.body;
     const lineItems = items.map(item => ({
       price_data: {
         currency: 'usd',
-        product_data: {
-          name: item.name,
-        },
+        product_data: { name: item.name },
         unit_amount: item.price * 100, // Stripe expects amounts in cents
       },
       quantity: item.quantity,
@@ -89,15 +70,10 @@ app.post('/create-checkout-session', async (req, res) => {
       mode: 'payment',
       return_url: `${process.env.CLIENT_URL}return?session_id={CHECKOUT_SESSION_ID}`,
       automatic_tax: { enabled: true },
-      metadata: {
-        customerId: customerId || '',
-        restaurantId: restaurantId,
-        items: JSON.stringify(items)
-      }
+      metadata: { customerId: customerId || '', restaurantId: restaurantId, items: JSON.stringify(items) }
     });
     res.send({ clientSecret: session.client_secret });
   } catch (error) {
-    console.error("Error creating checkout session:", error);
     res.status(500).send({ error: error.message });
   }
 });
@@ -111,13 +87,9 @@ app.get('/session-status', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-
-
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-
 });
-
 
 io.on('connection', (socket) => {
   console.log('a user connected');
@@ -125,6 +97,7 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
+
 
 
 
