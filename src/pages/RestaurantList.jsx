@@ -16,6 +16,7 @@ const RestaurantList = () => {
   const [error, setError] = useState('');
   const [location, setLocation] = useState(null);
   const [autocomplete, setAutocomplete] = useState(null);
+  const [searched, setSearched] = useState(false);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: googleMapsApiKey,
