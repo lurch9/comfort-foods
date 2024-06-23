@@ -48,4 +48,35 @@
   margin-left: 10px;
 }
 
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .menus-container {
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  .menu-box {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+  }
+
+  .menu-box h3 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
+
+  .menu-box button {
+    padding: 8px 15px;
+    font-size: 14px;
+    margin: 5px 0;
+    width: calc(50% - 10px);
+  }
+
+  .menu-box button + button {
+    margin-left: 0;
+    width: calc(50% - 10px);
+  }
+}
+
   

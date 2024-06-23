@@ -61,6 +61,40 @@
   margin: 5px 0;
 }
 
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .menu-container {
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  .menu-title {
+    font-size: 1.5em;
+    padding: 8px;
+  }
+
+  .menu-box {
+    padding: 15px;
+  }
+
+  .menu-name {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
+
+  .menu-item {
+    padding: 8px 0;
+  }
+
+  .item-name {
+    font-size: 1em;
+  }
+
+  .item-description, .item-price {
+    font-size: 0.9em;
+  }
+}
+
 
 
 

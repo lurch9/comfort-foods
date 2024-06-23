@@ -81,3 +81,34 @@ h2 {
   color: green;
 }
 
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 600px) {
+  .form-container {
+    width: 90%;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 5px;
+  }
+
+  .form-container h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .form-container form input, 
+  .form-container form button {
+    font-size: 1rem;
+    padding: 8px;
+  }
+
+  .form-container form div {
+    margin-bottom: 10px;
+  }
+
+  .error-message,
+  .success-message {
+    font-size: 0.75rem;
+  }
+}
+
+

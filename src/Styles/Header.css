@@ -23,7 +23,7 @@
   padding: 10px 20px;
   background-color: #632c0d;
   border-bottom: 1px solid #d8b69a;
-  color:#d8b69a;
+  color: #d8b69a;
 }
 
 .nav {
@@ -56,7 +56,7 @@
 .nav-right li button {
   background: none;
   border: none;
-  color: #333;
+  color: #d8b69a;
   cursor: pointer;
   font-size: 16px;
 }
@@ -77,5 +77,43 @@
   font-family: 'CustomFont';
   src: url('/Caveat-VariableFont_wght.ttf') format('woff2');
 }
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .nav {
+    flex-direction: column;
+  }
+
+  .nav-left,
+  .nav-right {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-left li,
+  .nav-right li {
+    margin: 5px 0;
+  }
+
+  .logo {
+    position: static;
+    transform: none;
+    margin-bottom: 10px;
+  }
+
+  .logo h1 {
+    font-size: 28px;
+  }
+
+  .nav-right li button {
+    font-size: 14px;
+  }
+}
+
 
   

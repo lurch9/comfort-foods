@@ -1,35 +1,64 @@
 /* src/components/LandingPage.css */
 .landing-page {
-    text-align: center;
-    padding: 2rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.landing-page h1 {
+  margin-bottom: 1rem;
+}
+
+.landing-page form {
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.landing-page input {
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.landing-page button {
+  padding: 0.5rem;
+  background-color: #55805f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.landing-page button:hover {
+  background-color: #0056b3;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .landing-page {
+    padding: 1rem;
   }
-  
+
   .landing-page h1 {
-    margin-bottom: 1rem;
+    font-size: 1.5rem;
   }
-  
+
   .landing-page form {
-    display: inline-block;
+    display: block;
     margin-top: 1rem;
   }
-  
+
   .landing-page input {
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    margin: 0.5rem 0;
+    width: calc(100% - 1rem);
+    display: block;
   }
-  
+
   .landing-page button {
-    padding: 0.5rem;
-    background-color: #55805f;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.75rem;
   }
-  
-  .landing-page button:hover {
-    background-color: #0056b3;
-  }
+}
+
   

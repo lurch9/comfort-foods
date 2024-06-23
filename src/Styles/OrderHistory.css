@@ -1,30 +1,58 @@
 .order-history-page {
-    padding: 20px;
+  padding: 20px;
+}
+
+.order-history-page h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.order-history-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+.order-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.order-item h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.order-item h4 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .order-history-page {
+    padding: 15px;
   }
-  
+
   .order-history-page h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 1.5em;
+    margin-bottom: 15px;
   }
-  
-  .order-history-page ul {
-    list-style: none;
-    padding: 0;
-  }
-  
+
   .order-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 8px;
+    margin-bottom: 8px;
   }
-  
+
   .order-item h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
+    font-size: 1.2em;
+    margin-bottom: 8px;
   }
-  
+
   .order-item h4 {
-    font-size: 18px;
-    margin-bottom: 5px;
+    font-size: 1em;
+    margin-bottom: 4px;
   }
+}
+
   
