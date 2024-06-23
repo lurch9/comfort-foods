@@ -5,15 +5,12 @@ const {
   getRestaurantById,
   updateRestaurant,
   deleteRestaurant,
-  getRestaurantsByZip,
+  getRestaurantsByProximity,
 } = require('../controllers/restaurantController');
 const { protect, managerProtect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.route('/zip').get((req, res, next) => {
-  console.log('Route /zip accessed');
-  next();
-}, getRestaurantsByZip);
+router.route('/near').get(getRestaurantsByProximity);
 
 router.route('/').post(protect, managerProtect, createRestaurant);
 router.route('/me').get(protect, managerProtect, getMyRestaurant);

@@ -3,12 +3,35 @@
 const asyncHandler = require('express-async-handler');
 const Restaurant = require('../models/Restaurant');
 const User = require('../models/User');
+const GEOCODE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json';
+const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
 
 const createRestaurant = asyncHandler(async (req, res) => {
   const { name, street, city, state, zip, contact } = req.body;
+
+  // Geocode the address to get coordinates
+  const geocodeResponse = await fetch(`${GEOCODE_API_URL}?address=${street},${city},${state},${zip}&key=${GEOCODE_API_KEY}`);
+  const geocodeData = await geocodeResponse.json();
+
+  if (geocodeData.status !== 'OK') {
+    return res.status(400).json({ message: 'Invalid address' });
+  }
+
+  const location = geocodeData.results[0].geometry.location;
+  const { lat, lng } = location;
+
   const restaurant = new Restaurant({
     name,
-    address: { street, city, state, zip },
+    address: {
+      street,
+      city,
+      state,
+      zip,
+      location: {
+        type: 'Point',
+        coordinates: [lng, lat]
+      }
+    },
     contact,
     manager: req.user._id,
   });
@@ -73,25 +96,29 @@ const getRestaurantById = asyncHandler(async (req, res) => {
   }
 });
 
-const getRestaurantsByZip = asyncHandler(async (req, res, next) => {
-  console.log('Entering getRestaurantsByZip function');
-  console.log('Request Query:', req.query); // Debug log
-
-  const zip = String(req.query.zip); // Ensure zip is treated as a string
-  console.log('Zip:', zip); // Debug log
+// Get restaurants by proximity
+const getRestaurantsByProximity = asyncHandler(async (req, res) => {
+  const { lat, lon, maxDistance = 5000 } = req.query; // maxDistance in meters
 
   try {
-    const restaurants = await Restaurant.find({ 'address.zip': zip });
-    console.log('Found Restaurants:', restaurants); // Debug log
+    // Find restaurants near the given coordinates
+    const restaurants = await Restaurant.find({
+      'address.location': {
+        $near: {
+          $geometry: { type: 'Point', coordinates: [parseFloat(lon), parseFloat(lat)] },
+          $maxDistance: parseInt(maxDistance)
+        }
+      }
+    });
 
     if (restaurants.length > 0) {
       res.json(restaurants);
     } else {
-      res.status(404).json({ message: 'No restaurants found for the provided zip code.' });
+      res.status(404).json({ message: 'No restaurants found near the provided location.' });
     }
   } catch (error) {
-    console.error('Error fetching restaurants by zip:', error);
-    next(error); // Pass error to the error handling middleware
+    console.error('Error fetching restaurants by proximity:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -119,7 +146,7 @@ module.exports = {
   createRestaurant,
   getRestaurantById,
   updateRestaurant,
-  getRestaurantsByZip,
+  getRestaurantsByProximity,
 };
 
 

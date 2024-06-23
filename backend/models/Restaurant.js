@@ -5,7 +5,13 @@ const addressSchema = mongoose.Schema({
   city: { type: String, required: true },
   state: { type: String, required: true },
   zip: { type: String, required: true },
+  location: {
+    type: { type: String, enum: ['Point'], required: true },
+    coordinates: { type: [Number], required: true }
+  }
 });
+
+addressSchema.index({ location: '2dsphere' });
 
 const restaurantSchema = mongoose.Schema({
   name: { type: String, required: true },
@@ -19,6 +25,7 @@ const restaurantSchema = mongoose.Schema({
 const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
 module.exports = Restaurant;
+
 
 
 

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import '../Styles/Dashboard.css';
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ManagerDashboard = () => {
   const { user, setUser } = useAuth();
@@ -23,18 +23,22 @@ const ManagerDashboard = () => {
 
   useEffect(() => {
     const fetchRestaurant = async () => {
+      console.log('Fetching restaurant details...');
       try {
         const response = await axios.get(`${API_BASE_URL}/api/restaurants/me`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
+        console.log('Restaurant details fetched:', response.data);
         setRestaurant(response.data);
-        setLoading(false);
       } catch (error) {
         if (error.response && error.response.status === 404) {
+          console.log('No restaurant found for the manager.');
           setRestaurant(null);
         } else {
+          console.error('Error fetching restaurant details:', error);
           setError(error.response ? error.response.data.message : error.message);
         }
+      } finally {
         setLoading(false);
       }
     };
@@ -45,13 +49,23 @@ const ManagerDashboard = () => {
   useEffect(() => {
     if (restaurant) {
       const fetchOrders = async () => {
+        console.log('Fetching orders with token:', user.token);
         try {
           const response = await axios.get(`${API_BASE_URL}/api/orders/restaurant`, {
             headers: { Authorization: `Bearer ${user.token}` },
           });
+          console.log('Orders fetched:', response.data);
           setOrders(response.data);
         } catch (error) {
-          setError(error.response ? error.response.data.message : error.message);
+          if (error.response && error.response.status === 404) {
+            console.log('No orders found for the restaurant.');
+            setOrders([]);
+          } else {
+            console.error('Error fetching restaurant details:', error);
+            setError(error.response ? error.response.data.message : error.message);
+          }
+        } finally {
+          setLoading(false);
         }
       };
 
@@ -66,6 +80,7 @@ const ManagerDashboard = () => {
       });
       setOrders(orders.map(order => order._id === orderId ? { ...order, status } : order));
     } catch (error) {
+      console.error('Error updating order status:', error);
       setError(error.response ? error.response.data.message : error.message);
     }
   };
@@ -80,9 +95,11 @@ const ManagerDashboard = () => {
       const response = await axios.post(`${API_BASE_URL}/api/restaurants`, newRestaurant, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
+      console.log('New restaurant created:', response.data);
       setRestaurant(response.data);
       setUser((prevUser) => ({ ...prevUser, restaurantId: response.data._id }));
     } catch (error) {
+      console.error('Error creating new restaurant:', error);
       setError(error.response ? error.response.data.message : error.message);
     }
   };
@@ -93,9 +110,11 @@ const ManagerDashboard = () => {
         await axios.delete(`${API_BASE_URL}/api/restaurants/${restaurant._id}`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
+        console.log('Restaurant deleted.');
         setRestaurant(null);
         setUser((prevUser) => ({ ...prevUser, restaurantId: null }));
       } catch (error) {
+        console.error('Error deleting restaurant:', error);
         setError(error.response ? error.response.data.message : error.message);
       }
     }
@@ -124,7 +143,7 @@ const ManagerDashboard = () => {
           </div>
           <h3>Orders</h3>
           {orders.length === 0 ? (
-            <p>No orders found.</p>
+            <p>No orders found for this restaurant.</p>
           ) : (
             <div className="order-list">
               {orders.map(order => (
@@ -185,6 +204,14 @@ const ManagerDashboard = () => {
 };
 
 export default ManagerDashboard;
+
+
+
+
+
+
+
+
 
 
 
