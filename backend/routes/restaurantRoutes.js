@@ -10,10 +10,11 @@ const {
 const { protect, managerProtect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.route('/near').get(getRestaurantsByProximity);
-
 router.route('/').post(managerProtect, createRestaurant);
 router.route('/me').get(managerProtect, getMyRestaurant);
+router.route('/near').get(getRestaurantsByProximity);
+
+
 
 router.route('/:id')
   .get(managerProtect, (req, res, next) => {
