@@ -1,0 +1,141 @@
+/* src/Styles/RestaurantList.css */
+
+.restaurant-list-container {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  margin-top:20px;
+  color: #632c0d;
+  background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-list-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #d8b69a;
+  background-color: #632c0d;
+  border-radius: 5px;
+  color: #f8f9fa;
+}
+
+.restaurant-list-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 20px; /* Add margin-top for spacing */
+}
+
+.restaurant-list-container input {
+  padding: 10px;
+  width: 300px;
+  text-align: center;
+  border: 1px solid #d8b69a;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.restaurant-list-container label {
+  margin-bottom: 10px;
+}
+
+.restaurant-list-container button {
+  padding: 10px 20px;
+  background-color: #55805f;
+  color: #f8f9fa;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.restaurant-list-container button:hover {
+  background-color: #632c0d;
+}
+
+.restaurant-list-container .error-message {
+  text-align: center;
+  color: red;
+  margin-top: 10px;
+}
+
+.restaurant-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.restaurant-box {
+  background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: calc(50% - 20px);
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.restaurant-box h3 {
+  margin-top: 0;
+  color: #632c0d;
+}
+
+.restaurant-box p {
+  margin: 5px 0;
+}
+
+.view-menu-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #55805f;
+  color: #f8f9fa;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.view-menu-link:hover {
+  background-color: #632c0d;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .restaurant-list-container {
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  .restaurant-list-container h2 {
+    font-size: 1.5em;
+    padding: 8px;
+  }
+
+  .restaurant-list-container input {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .restaurant-list-container button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .restaurant-list {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .restaurant-box {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .view-menu-link {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
+

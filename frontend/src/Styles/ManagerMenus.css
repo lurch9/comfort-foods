@@ -1,0 +1,82 @@
+/* src/Styles/ManagerMenus.css */
+
+.menus-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #632c0d;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.menu-box {
+  background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  width: calc(50% - 20px);
+}
+
+.menu-box h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #632c0d;
+}
+
+.menu-box button {
+  background-color: #55805f;
+  color: #f8f9fa;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+  margin: 4px 2px;
+}
+
+.menu-box button:hover {
+  background-color: #632c0d;
+}
+
+.menu-box button + button {
+  margin-left: 10px;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .menus-container {
+    padding: 10px;
+    max-width: 100%;
+  }
+
+  .menu-box {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+  }
+
+  .menu-box h3 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
+
+  .menu-box button {
+    padding: 8px 15px;
+    font-size: 14px;
+    margin: 5px 0;
+    width: calc(50% - 10px);
+  }
+
+  .menu-box button + button {
+    margin-left: 0;
+    width: calc(50% - 10px);
+  }
+}
+
+  

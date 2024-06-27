@@ -1,0 +1,33 @@
+/* src/Styles/Checkout.css */
+.checkout-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #f9f9f9;
+}
+.checkout-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #d8b69a;
+  background-color: #632c0d;
+  border-radius: 5px;
+  color: #f8f9fa;
+}
+
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 600px) {
+  .checkout-container {
+    width: 95%;
+    padding: 10px;
+    border-radius: 5px;
+  }
+}
+
+
+
+
+

@@ -1,0 +1,80 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-image: url('/jed-owen-NPBnWE1o07I-unsplash.jpg');
+  background-size: cover; /* Ensures the image covers the whole page */
+  background-repeat: no-repeat; /* Prevents the image from repeating */
+  background-position: center; /* Centers the image */
+  height: 700px;
+}
+
+.App {
+  text-align: center;
+}
+header {
+  background: #282c34;
+  padding: 1em;
+}
+
+
+
+nav a {
+  color: white;
+  margin: 0 1em;
+  text-decoration: none;
+}
+
+h2 {
+  color: #333;
+}
+
+
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 300px;
+  margin: 2em auto;
+}
+
+label {
+  margin-bottom: 0.5em;
+}
+
+input {
+  margin-bottom: 1em;
+  padding: 0.5em;
+  width: 100%;
+}
+
+button {
+  padding: 0.5em 2em;
+  background: #d8b69a;
+  border: none;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  padding: 0.5em 2em;
+  background: #d8b69a;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #632c0d;
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 600px) {
+  body {
+    background-size: cover;
+    background-position: top;
+  }
+}
+
+
+

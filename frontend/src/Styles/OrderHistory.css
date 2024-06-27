@@ -1,0 +1,114 @@
+.order-history-page {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8); /* Light background color for better readability */
+  border-radius: 10px; /* Rounded corners for a modern look */
+  max-width: 800px; /* Constrain the width for better readability */
+  margin: 20px auto; /* Center the container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
+.order-history-page h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #632c0d; /* Color consistent with the theme */
+  text-align: center; /* Center the heading */
+}
+
+.order-history-page ul {
+  list-style: none;
+  padding: 0;
+}
+
+.order-item {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 5px; /* Rounded corners */
+  background-color: #fff; /* White background for contrast */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.order-item h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.order-item h4 {
+  font-size: 18px;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+.order-item p {
+  font-size: 16px;
+  margin: 5px 0;
+  color: #666;
+}
+
+.order-item ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.order-item ul li {
+  margin-bottom: 5px;
+  color: #444;
+}
+
+.order-item button {
+  padding: 10px 15px;
+  background-color: #632c0d; /* Button color consistent with the theme */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-item button:hover {
+  background-color: #4f1e0a; /* Darker shade on hover */
+}
+
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+  text-align: center; /* Center the error message */
+}
+
+.success-message {
+  color: green;
+  font-size: 0.875rem;
+  text-align: center; /* Center the success message */
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 768px) {
+  .order-history-page {
+    padding: 15px;
+  }
+
+  .order-history-page h2 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+  }
+
+  .order-item {
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+
+  .order-item h3 {
+    font-size: 1.2em;
+    margin-bottom: 8px;
+  }
+
+  .order-item h4 {
+    font-size: 1em;
+    margin-bottom: 4px;
+  }
+}
+
+
+  
