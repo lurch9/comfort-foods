@@ -1,5 +1,3 @@
-// restaurantController.js
-
 const asyncHandler = require('express-async-handler');
 const Restaurant = require('../models/Restaurant');
 const User = require('../models/User');
@@ -9,9 +7,12 @@ const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
 const createRestaurant = asyncHandler(async (req, res) => {
   const { name, street, city, state, zip, contact } = req.body;
 
-  // Geocode the address to get coordinates
+  console.log('Received data:', { name, street, city, state, zip, contact });
+
   const geocodeResponse = await fetch(`${GEOCODE_API_URL}?address=${street},${city},${state},${zip}&key=${GEOCODE_API_KEY}`);
   const geocodeData = await geocodeResponse.json();
+
+  console.log('Geocode API response:', geocodeData);
 
   if (geocodeData.status !== 'OK') {
     return res.status(400).json({ message: 'Invalid address' });
@@ -37,71 +38,71 @@ const createRestaurant = asyncHandler(async (req, res) => {
   });
 
   const createdRestaurant = await restaurant.save();
+  console.log('Created restaurant:', createdRestaurant);
 
-  // Update the user with the restaurant ID if the user is a manager
   if (req.user.role === 'manager') {
     req.user.restaurantId = createdRestaurant._id;
     await req.user.save();
-
-    // Update the user document in the database
     await User.findByIdAndUpdate(req.user._id, { restaurantId: createdRestaurant._id });
   }
 
   res.status(201).json(createdRestaurant);
 });
 
-// Get the manager's restaurant
-const getMyRestaurant = asyncHandler(async (req, res) => {
-  const restaurant = await Restaurant.findOne({ manager: req.user._id });
-  if (restaurant) {
-    res.json(restaurant);
-  } else {
-    res.status(404);
-    throw new Error('Restaurant not found');
-  }
-});
-
-// Delete a restaurant
-const deleteRestaurant = asyncHandler(async (req, res) => {
-  const restaurant = await Restaurant.findById(req.params.id);
-
-  if (restaurant) {
-    // Only the manager of the restaurant can delete it
-    if (restaurant.manager.toString() !== req.user._id.toString()) {
-      res.status(401);
-      throw new Error('Not authorized to delete this restaurant');
+const getMyRestaurant = asyncHandler(async (req, res, next) => {
+  try {
+    const restaurant = await Restaurant.findOne({ manager: req.user._id });
+    if (restaurant) {
+      res.json(restaurant);
+    } else {
+      res.status(404).json({ message: 'Restaurant not found' });
     }
-
-    await Restaurant.deleteOne({ _id: req.params.id });
-
-    // Clear the restaurantId field of the user
-    req.user.restaurantId = null;
-    await req.user.save();
-
-    res.json({ message: 'Restaurant removed' });
-  } else {
-    res.status(404);
-    throw new Error('Restaurant not found');
+  } catch (error) {
+    next(error);
   }
 });
 
-// Get restaurant by ID
+const deleteRestaurant = asyncHandler(async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+    console.log('Restaurant found:', restaurant);
+    console.log('Requesting user:', req.user );
+
+    if (restaurant) {
+      if (!req.user || !req.user._id || !restaurant.manager) {
+        throw new Error('Invalid request');
+      }
+
+      if (restaurant.manager.toString() !== req.user._id.toString()) {
+        res.status(401).json({ message: 'Not authorized to delete this restaurant' });
+      } else {
+        await Restaurant.deleteOne({ _id: req.params.id });
+        req.user.restaurantId = null;
+        await req.user.save();
+        res.json({ message: 'Restaurant removed' });
+      }
+    } else {
+      res.status(404).json({ message: 'Restaurant not found' });
+    }
+  } catch (error) {
+    console.error('Error in deleteRestaurant:', error);
+    throw error;
+  }
+});
+
 const getRestaurantById = asyncHandler(async (req, res) => {
   const restaurant = await Restaurant.findById(req.params.id);
   if (restaurant) {
     res.json(restaurant);
   } else {
-    res.status(404);
-    throw new Error('Restaurant not found');
+    res.status(404).json({ message: 'Restaurant not found' });
   }
 });
 
-// Get restaurants by proximity
 const getRestaurantsByProximity = asyncHandler(async (req, res) => {
-  const { lat, lon, maxDistance = 5000 } = req.query; // maxDistance in meters
+  const { lat, lon, maxDistance = 5000 } = req.query;
 
   try {
-    // Find restaurants near the given coordinates
     const restaurants = await Restaurant.find({
       'address.location': {
         $near: {
@@ -122,7 +123,6 @@ const getRestaurantsByProximity = asyncHandler(async (req, res) => {
   }
 });
 
-// Update restaurant
 const updateRestaurant = asyncHandler(async (req, res) => {
   const restaurant = await Restaurant.findById(req.params.id);
   if (restaurant) {
@@ -148,6 +148,7 @@ module.exports = {
   updateRestaurant,
   getRestaurantsByProximity,
 };
+
 
 
 

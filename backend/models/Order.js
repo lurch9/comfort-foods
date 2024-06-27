@@ -26,7 +26,7 @@ const orderSchema = mongoose.Schema(
     ],
     total: { type: Number, required: true },
     paymentIntentId: { type: String, required: true },
-    sessionId: { type: String, required: true }, // Add this line
+    sessionId: { type: String, required: true },
     status: { type: String, required: true, default: 'pending' },
   },
   {

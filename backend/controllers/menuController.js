@@ -6,8 +6,7 @@ const createMenu = asyncHandler(async (req, res) => {
   const { name, restaurantId } = req.body;
 
   if (!restaurantId) {
-    res.status(400);
-    throw new Error('Restaurant ID is required');
+    return res.status(400).json({ message: 'Restaurant ID is required' });
   }
 
   const menu = new Menu({
@@ -28,7 +27,7 @@ const getMenusByRestaurant = asyncHandler(async (req, res) => {
     const menus = await Menu.find({ restaurantId: restaurantId });
     if (menus.length === 0) {
       console.log(`No menus found for restaurant ID: ${restaurantId}`);
-      res.status(404).json({ message: 'Menus not found' });
+      return res.status(404).json({ message: 'Menus not found' });
     } else {
       console.log(`Found menus: ${JSON.stringify(menus)}`);
       res.json(menus);
@@ -45,8 +44,7 @@ const getMenuById = asyncHandler(async (req, res) => {
   if (menu) {
     res.json(menu);
   } else {
-    res.status(404);
-    throw new Error('Menu not found');
+    res.status(404).json({ message: 'Menu not found' });
   }
 });
 
@@ -63,8 +61,7 @@ const updateMenu = asyncHandler(async (req, res) => {
     const updatedMenu = await menu.save();
     res.json(updatedMenu);
   } else {
-    res.status(404);
-    throw new Error('Menu not found');
+    res.status(404).json({ message: 'Menu not found' });
   }
 });
 
@@ -75,8 +72,7 @@ const deleteMenu = asyncHandler(async (req, res) => {
     await Menu.deleteOne({ _id: req.params.id }); // Updated to use deleteOne
     res.json({ message: 'Menu removed' });
   } else {
-    res.status(404);
-    throw new Error('Menu not found');
+    res.status(404).json({ message: 'Menu not found' });
   }
 });
 
@@ -87,6 +83,7 @@ module.exports = {
   updateMenu,
   deleteMenu,
 };
+
 
 
 

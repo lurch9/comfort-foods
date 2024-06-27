@@ -9,15 +9,16 @@ const menuRoutes = require('./routes/menuRoutes');
 const stripeWebhook = require('./routes/stripeWebhook');
 const cors = require('cors');
 const cookieParser = require('cookie-parser'); // Add this line
-const { errorHandler } = require('./middleware/errorMiddleware');
+const testRoutes = require('./routes/testRoutes');
 const http = require('http');
 const { Server } = require('socket.io');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 dotenv.config();
-
-connectDB();
-
+// Connect to the appropriate database based on the environment
+const dbURI = process.env.NODE_ENV === 'test' ? process.env.MONGO_URI_TEST : process.env.MONGO_URI;
+connectDB(dbURI);
+console.log('dbURI: ', dbURI);
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -43,6 +44,9 @@ app.use((req, res, next) => {
   next();
 });
 
+if (process.env.NODE_ENV = 'test') {
+  app.use('/api/test', testRoutes);
+}
 app.use('/api/users', userRoutes);
 app.use('/api/restaurants', restaurantRoutes);
 app.use('/api/orders', orderRoutes);
@@ -56,9 +60,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'))
   );
 }
-
-// Error handling middleware
-app.use(errorHandler);
 
 app.post('/create-checkout-session', async (req, res) => {
   console.log('Creating checkout session');
@@ -94,6 +95,7 @@ app.get('/session-status', async (req, res) => {
   });
 });
 
+
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
@@ -105,6 +107,8 @@ io.on('connection', (socket) => {
     console.log('user disconnected');
   });
 });
+
+
 
 
 
