@@ -54,12 +54,15 @@ app.use('/api/menus', menuRoutes);
 app.use('/api/webhook', stripeWebhook);
 
 // Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '..', 'dist')));
-  app.get('*', (req, res) =>
-    res.sendFile(path.resolve(__dirname, '..', 'dist', 'index.html'))
-  );
-}
+app.get('*', (req, res, next) => {
+  console.log(`Serving index.html for: ${req.method} ${req.url}`);
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'), (err) => {
+    if (err) {
+      console.error(`Error serving index.html: ${err.message}`);
+      next(err);
+    }
+  });
+});
 
 app.post('/create-checkout-session', async (req, res) => {
   console.log('Creating checkout session');
